@@ -1,0 +1,127 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply overflow-x-hidden;
+  }
+}
+
+@layer utilities {
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-20px) rotate(180deg);
+    }
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -200% center;
+    }
+    100% {
+      background-position: 200% center;
+    }
+  }
+
+  @keyframes particle-float {
+    0% {
+      transform: translate(0, 0) scale(0);
+      opacity: 0;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      transform: translate(100px, -100px) scale(1);
+      opacity: 0;
+    }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.5);
+    }
+  }
+
+  @keyframes spin-slow {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-shimmer {
+    background-size: 200% auto;
+    animation: shimmer 3s linear infinite;
+  }
+
+  .animate-particle {
+    animation: particle-float 4s ease-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow-pulse 2s ease-in-out infinite;
+  }
+
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+  .fortune-text {
+    font-family: 'Black Ops One', cursive;
+    color: #C41E3A;
+    -webkit-text-stroke: 4px #FFD700;
+    text-shadow:
+      0 0 20px #FFD700,
+      -2px -2px 0 #FFF,
+      2px -2px 0 #FFF,
+      -2px 2px 0 #FFF,
+      2px 2px 0 #FFF,
+      6px 6px 0 #000,
+      8px 8px 0 rgba(0,0,0,0.5),
+      0 0 40px rgba(255, 215, 0, 0.8),
+      0 0 60px rgba(255, 215, 0, 0.4);
+  }
+
+  .fortune-number {
+    font-family: 'Black Ops One', cursive;
+    color: #FFD700;
+    -webkit-text-stroke: 6px #C41E3A;
+    text-shadow:
+      0 0 30px #FFD700,
+      -3px -3px 0 #FFF,
+      3px -3px 0 #FFF,
+      -3px 3px 0 #FFF,
+      3px 3px 0 #FFF,
+      8px 8px 0 #000,
+      12px 12px 0 rgba(0,0,0,0.5),
+      0 0 60px rgba(255, 215, 0, 1),
+      0 0 80px rgba(255, 215, 0, 0.6);
+  }
+}
