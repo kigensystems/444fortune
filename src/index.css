@@ -99,15 +99,45 @@
 
   .fortune-text {
     font-family: 'Poppins', sans-serif;
-    font-weight: 800;
+    font-weight: 900;
     color: #F4E5C3;
-    text-shadow: 3px 3px 0 #8B4513;
+    text-shadow:
+      2px 2px 0 #C4A137,
+      3px 3px 8px rgba(0, 0, 0, 0.3);
   }
 
   .fortune-number {
     font-family: 'Poppins', sans-serif;
-    font-weight: 800;
+    font-weight: 900;
     color: #F4E5C3;
-    text-shadow: 3px 3px 0 #8B4513;
+    text-shadow:
+      2px 2px 0 #C4A137,
+      3px 3px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .social-button-3d {
+    background: linear-gradient(180deg, #F4E5C3 0%, #D4AF37 100%);
+    box-shadow:
+      0 6px 0 #B8960B,
+      0 10px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.1s ease;
+  }
+
+  .social-button-3d svg {
+    color: #8B4513;
+    filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+  }
+
+  .cta-button-3d {
+    background: linear-gradient(180deg, #FFE5B4 0%, #F4E5C3 50%, #D4AF37 100%);
+    box-shadow:
+      0 8px 0 #B8960B,
+      0 12px 20px rgba(0, 0, 0, 0.3);
+    color: #8B0000;
+    font-weight: 900;
+    text-shadow:
+      0 2px 0 rgba(0, 0, 0, 0.1),
+      0 -1px 0 rgba(255, 255, 255, 0.3);
+    transition: all 0.1s ease;
   }
 }

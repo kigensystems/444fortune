@@ -55,14 +55,15 @@ function SocialButton({ icon: Icon, href, label }: { icon: any; href: string; la
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl"
-      style={{
-        background: 'linear-gradient(135deg, #D4AF37 0%, #F4E5C3 100%)',
-        color: '#8B0000',
-        border: '3px solid #FFF8DC'
+      className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl social-button-3d"
+      whileHover={{
+        y: 2,
+        boxShadow: '0 4px 0 #B8960B, 0 8px 12px rgba(0, 0, 0, 0.3)'
       }}
-      whileHover={{ scale: 1.1, y: -4 }}
-      whileTap={{ scale: 0.95 }}
+      whileTap={{
+        y: 4,
+        boxShadow: '0 2px 0 #B8960B, 0 4px 8px rgba(0, 0, 0, 0.3)'
+      }}
       aria-label={label}
     >
       <Icon />
@@ -178,15 +179,51 @@ function App() {
               FORTUNES
             </motion.h1>
 
-            <motion.p
-              className="text-2xl md:text-3xl mb-8 font-black"
-              style={{ color: '#FFF8DC' }}
+            <motion.div
+              className="mb-8 space-y-3 flex flex-col items-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.8 }}
             >
-              PROSPERITY • ABUNDANCE • LUCK
-            </motion.p>
+              <div
+                className="text-3xl md:text-4xl font-black"
+                style={{
+                  color: '#FFE5B4',
+                  letterSpacing: '4px',
+                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                }}
+              >
+                PROSPERITY
+              </div>
+              <div
+                className="w-12 h-1 rounded-full"
+                style={{ background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)' }}
+              />
+              <div
+                className="text-3xl md:text-4xl font-black"
+                style={{
+                  color: '#FFE5B4',
+                  letterSpacing: '4px',
+                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                }}
+              >
+                ABUNDANCE
+              </div>
+              <div
+                className="w-12 h-1 rounded-full"
+                style={{ background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)' }}
+              />
+              <div
+                className="text-3xl md:text-4xl font-black"
+                style={{
+                  color: '#FFE5B4',
+                  letterSpacing: '4px',
+                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                }}
+              >
+                LUCK
+              </div>
+            </motion.div>
 
             <motion.div
               className="flex gap-4 mb-12 justify-center"
@@ -201,17 +238,18 @@ function App() {
             </motion.div>
 
             <motion.button
-              className="px-12 py-6 text-2xl font-black rounded-full shadow-lg"
-              style={{
-                background: 'linear-gradient(135deg, #D4AF37 0%, #F4E5C3 100%)',
-                color: '#8B0000',
-                border: '3px solid #FFF8DC'
-              }}
+              className="px-12 py-6 text-2xl rounded-full cta-button-3d"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.9, duration: 0.6 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{
+                y: 3,
+                boxShadow: '0 5px 0 #B8960B, 0 9px 16px rgba(0, 0, 0, 0.3)'
+              }}
+              whileTap={{
+                y: 6,
+                boxShadow: '0 2px 0 #B8960B, 0 6px 12px rgba(0, 0, 0, 0.3)'
+              }}
             >
               JOIN THE FORTUNE
             </motion.button>
