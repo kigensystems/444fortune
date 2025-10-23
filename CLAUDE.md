@@ -29,13 +29,24 @@
 
 ## Design System
 
-### Brand Colors (Tailwind Theme)
+### Brand Colors (Tailwind Theme + Custom)
+**Updated Palette - Gold + Cream Elegance:**
 ```javascript
-'fortune-red': '#C41E3A'        // Primary red - casino energy
-'deep-red': '#8B0000'           // Dark red - background depth
-'lucky-gold': '#FFD700'         // Bright gold - prosperity, accents
-'rich-gold': '#B8860B'          // Dark gold - depth and shadows
-'prosperity-orange': '#FF6B35'  // Warm accent - card gradients
+// Primary Colors
+'#F4E5C3' - Cream/champagne gold (main titles, borders)
+'#FFE5B4' - Peach/light gold (gradients, highlights)
+'#D4AF37' - Antique gold (gradients, accents)
+'#B8960B' - Dark gold (3D bases, shadows)
+'#C4A137' - Mid gold (text shadows)
+'#8B0000' - Dark red (text on gold backgrounds)
+'#8B4513' - Dark brown (text shadows, depth)
+
+// Tailwind Config (legacy - being phased out)
+'fortune-red': '#C41E3A'
+'deep-red': '#8B0000'
+'lucky-gold': '#FFD700'
+'rich-gold': '#B8860B'
+'prosperity-orange': '#FF6B35'
 ```
 
 ### Typography
@@ -46,11 +57,12 @@
 - Class: `font-casino` and `font-sans` (both configured)
 - Weights: 400, 500, 600, 700, 800, 900
 
-**Text Effects:**
-- `.fortune-text` - Multi-stroke effect for "FORTUNES" text
-  - Red fill, gold stroke, white outline, black shadow, golden glow
-- `.fortune-number` - Multi-stroke effect for "444" numbers
-  - Gold fill, red stroke, white outline, black shadow, enhanced glow
+**Text Effects (Simplified 3D - No Glow):**
+- `.fortune-text` - Clean 3D depth for "FORTUNES"
+  - Cream fill (#F4E5C3), layered gold shadows, dark shadow for depth
+- `.fortune-number` - Clean 3D depth for "444"
+  - Cream fill (#F4E5C3), layered gold shadows, dark shadow for depth
+- Both use 2-layer shadow progression (no glow effects)
 
 **Typography Scale:**
 - Hero number "444": `text-9xl` with `.fortune-number` class
@@ -71,9 +83,10 @@
 - `float` (6s) - Vertical float + rotation for decorative elements
 - `shimmer` (3s) - Gradient text shimmer
 - `particle-float` (4s) - Upward particle rise
-- `glow-pulse` (2s) - Button/text glow effect
+- `glow-pulse` (2s) - Button/text glow effect (deprecated - not in use)
 - `spin-slow` (20s) - Slow rotation for decorative elements
-- `marquee` (20s) - Infinite horizontal scroll for ticker text
+- `marquee` (20s) - Fast horizontal scroll for ticker text
+- `marquee-slow` (40s) - Slow luxurious scroll (current banner speed)
 
 ---
 
@@ -82,25 +95,33 @@
 ### Main Sections (App.tsx)
 
 1. **Top Marquee Banner**
-   - Infinite scrolling ticker text
-   - Gold background, red text
+   - Infinite slow scrolling ticker (40s cycle)
+   - Antique gold gradient background (matches CTA button)
+   - Dark red embossed text with 3D effect
    - Message: "✦ 444 FORTUNES ✦ PROSPERITY ✦ ABUNDANCE ✦ GOOD LUCK ✦"
 
-2. **Hero Section** (Split Layout)
-   - **LEFT 50%**: Content area
-     - "444" number with multi-stroke effect
-     - "FORTUNES" headline with multi-stroke effect
-     - Tagline: "PROSPERITY • ABUNDANCE • LUCK"
+2. **Hero Section** (3-Column Layout)
+   - **LEFT**: Heyyi Mascot
+     - Female prosperity goddess in glass-morphism frame
+     - Portrait orientation (256-320px wide)
+   - **CENTER**: Content area
+     - "444" number with clean 3D effect
+     - "FORTUNES" headline matching style
+     - Visual divider (golden gradient line)
+     - Stacked subtitle: PROSPERITY / ABUNDANCE / LUCK
      - Social icon button row (Twitter, Telegram, Discord, Website)
-     - Primary CTA: "JOIN THE FORTUNE"
-   - **RIGHT 50%**: Dual Mascots
-     - **heyyi.png** (left) - Female prosperity goddess
-     - **cz.png** (right) - Male fortune bringer
-     - Side-by-side display in bordered boxes
-     - Landscape boxes (wider than tall) with black borders
-     - Transparent backgrounds to show site background through
-     - Responsive sizing: 448px-896px wide depending on screen
-     - Spring entrance animations + hover scale effects
+     - Primary CTA: "JOIN THE FORTUNE" (antique gold gradient)
+   - **RIGHT**: CZ Mascot
+     - Male fortune bringer in glass-morphism frame
+     - Portrait orientation (256-320px wide)
+     - Image positioned 6% left (44% horizontal position)
+
+   **Mascot Containers:**
+   - Glass morphism effect with subtle brown tint
+   - Semi-transparent golden borders (2px)
+   - Inset highlights for beveled edge
+   - Hover: slight lift with enhanced shadow
+   - Optimized images (1600px, ~1.4-2.5MB each)
 
 3. **Features/Story Section**
    - 3 story cards in responsive grid (1 col mobile, 3 col desktop)
@@ -187,18 +208,31 @@
 
 ## Current State & Pending Work
 
-### ✅ Completed (v1 Foundation)
-- Casino red/gold color palette implemented
-- Poppins font integrated with multi-stroke text effects
-- Illustrated background image (444background.jpg)
-- Split hero layout with dual mascots (heyyi.png + cz.png)
-- Mascots in landscape bordered boxes with transparent backgrounds
-- Social icon button row (Twitter, Telegram, Discord, Website)
-- Top/bottom marquee ticker banners
-- Story card section with scroll animations
-- Particle sparkle effects (subtle golden dots)
-- Responsive grid layouts
-- Removed: Floating coin emojis (too distracting)
+### ✅ Completed (v2 - Elegant Gold Update)
+**Design System Overhaul:**
+- Replaced bright ketchup-mustard colors with sophisticated gold + cream palette
+- Clean 3D depth effects (removed all glow)
+- Poppins font with simplified text shadows
+- Antique gold gradients throughout (buttons, banners)
+
+**Layout & Components:**
+- 3-column hero layout (mascot | content | mascot)
+- Glass morphism mascot frames with golden borders
+- Stacked subtitle with proper hierarchy
+- Golden divider line between title and subtitle
+- Slow marquee animation (40s) with embossed text
+- Social buttons with 3D raised effect
+- CTA button with chunky 3D press effect
+
+**Performance:**
+- Optimized mascot images (5.5MB → 1.4-2.5MB at 1600px)
+- Removed backdrop-filter initially (caused lag, re-added for glass effect)
+- Responsive breakpoints: mobile (256px) → XL (320px)
+
+**Assets:**
+- Illustrated background (444background.jpg, 2.4MB)
+- Optimized mascots (heyyi.png 2.5MB, cz.png 1.4MB at 1600px)
+- Removed original 5MB+ backups
 
 ### 🎨 Assets
 1. **Background Image** ✅ COMPLETED

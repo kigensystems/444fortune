@@ -28,22 +28,100 @@ function Particle({ delay = 0 }) {
 
 function Marquee({ text }: { text: string }) {
   return (
-    <div className="overflow-hidden whitespace-nowrap bg-gradient-to-r from-rich-gold via-amber-700 to-rich-gold py-5 shadow-inner">
+    <div
+      className="overflow-hidden whitespace-nowrap py-5"
+      style={{
+        background: 'linear-gradient(180deg, #FFE5B4 0%, #F4E5C3 50%, #D4AF37 100%)',
+        boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.2)'
+      }}
+    >
       <div className="inline-block animate-marquee-slow">
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
       </div>
       <div className="inline-block animate-marquee-slow">
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
-        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
+        <span
+          className="text-xl font-black mx-12"
+          style={{
+            color: '#8B0000',
+            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
+          }}
+        >{text}</span>
       </div>
     </div>
   )
@@ -141,7 +219,7 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl overflow-hidden"
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden"
               style={{
                 background: 'rgba(139, 69, 19, 0.15)',
                 backdropFilter: 'blur(10px)',
@@ -169,7 +247,7 @@ function App() {
               <img
                 src="/heyyi.png"
                 alt="Heyyi - Prosperity Goddess"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover object-center"
               />
             </motion.div>
           </motion.div>
@@ -286,7 +364,7 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl overflow-hidden"
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden flex items-center justify-center"
               style={{
                 background: 'rgba(139, 69, 19, 0.15)',
                 backdropFilter: 'blur(10px)',
@@ -315,6 +393,7 @@ function App() {
                 src="/cz.png"
                 alt="CZ - Modern Fortune Bringer"
                 className="w-full h-full object-cover"
+                style={{ objectPosition: '44% 50%' }}
               />
             </motion.div>
           </motion.div>
