@@ -1,129 +1,81 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 import { FaTwitter, FaTelegramPlane, FaDiscord, FaGlobe } from 'react-icons/fa'
+import { DotLottieReact } from '@lottiefiles/dotlottie-react'
 
-function Particle({ delay = 0 }) {
-  const randomX = Math.random() * 100
-  const randomDelay = delay + Math.random() * 2
+function Marquee({ text }: { text: string }) {
+  const repetitions = Array.from({ length: 6 }, (_, i) => i)
 
   return (
-    <motion.div
-      className="absolute w-2 h-2 bg-lucky-gold rounded-full"
-      style={{ left: `${randomX}%`, bottom: '0' }}
-      initial={{ y: 0, opacity: 0, scale: 0 }}
-      animate={{
-        y: -200,
-        opacity: [0, 1, 0],
-        scale: [0, 1, 0],
-      }}
-      transition={{
-        duration: 4,
-        delay: randomDelay,
-        repeat: Infinity,
-        ease: 'easeOut',
-      }}
-    />
+    <div className="overflow-hidden whitespace-nowrap py-5 bg-marquee-gold">
+      <div className="inline-block animate-marquee-slow">
+        {repetitions.map(i => (
+          <span key={`a-${i}`} className="marquee-text">{text}</span>
+        ))}
+      </div>
+      <div className="inline-block animate-marquee-slow">
+        {repetitions.map(i => (
+          <span key={`b-${i}`} className="marquee-text">{text}</span>
+        ))}
+      </div>
+    </div>
   )
 }
 
-function Marquee({ text }: { text: string }) {
+function CountdownTimer() {
+  const [timeLeft, setTimeLeft] = useState(20 * 60) // 20 minutes in seconds
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) return 20 * 60 // Reset to 20 minutes
+        return prev - 1
+      })
+    }, 1000)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  const minutes = Math.floor(timeLeft / 60)
+  const seconds = timeLeft % 60
+
   return (
-    <div
-      className="overflow-hidden whitespace-nowrap py-5"
-      style={{
-        background: 'linear-gradient(180deg, #FFE5B4 0%, #F4E5C3 50%, #D4AF37 100%)',
-        boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 0, 0, 0.2)'
-      }}
+    <motion.div
+      className="text-center"
+      initial={{ opacity: 0, scale: 0.9 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
     >
-      <div className="inline-block animate-marquee-slow">
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
+      <p className="text-xl md:text-2xl font-bold mb-6" style={{ color: '#FFE5B4', letterSpacing: '2px' }}>
+        NEXT FORTUNE DRAW
+      </p>
+
+      <motion.div
+        className="text-6xl md:text-7xl font-black mb-6"
+        style={{
+          color: '#F4E5C3',
+          textShadow: '2px 2px 0 #C4A137, 4px 4px 12px rgba(0, 0, 0, 0.4)'
+        }}
+        animate={{ scale: timeLeft <= 10 ? [1, 1.05, 1] : 1 }}
+        transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
+      >
+        {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
+      </motion.div>
+
+      {/* Lottie Animation */}
+      <div className="mb-6 max-w-lg mx-auto">
+        <DotLottieReact
+          src="https://lottie.host/081bab50-833b-43b2-943a-a0331d7cb5fd/9WNEo75kOJ.lottie"
+          loop
+          autoplay
+        />
       </div>
-      <div className="inline-block animate-marquee-slow">
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-        <span
-          className="text-xl font-black mx-12"
-          style={{
-            color: '#8B0000',
-            textShadow: '0 2px 0 rgba(0, 0, 0, 0.1), 0 -1px 0 rgba(255, 255, 255, 0.3)'
-          }}
-        >{text}</span>
-      </div>
-    </div>
+
+      <p className="text-lg" style={{ color: '#F4E5C3', opacity: 0.9 }}>
+        {timeLeft <= 60 ? 'Fortune favors the ready...' : 'Hold strong, prosperity approaches'}
+      </p>
+    </motion.div>
   )
 }
 
@@ -150,67 +102,23 @@ function SocialButton({ icon: Icon, href, label }: { icon: any; href: string; la
 }
 
 function App() {
-  const [isVisible, setIsVisible] = useState(false)
-  const featuresRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true)
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    if (featuresRef.current) {
-      observer.observe(featuresRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
-  const features = [
-    {
-      icon: '🪙',
-      title: 'Triple Fortune Power',
-      description: 'The number 4 multiplied brings ultimate prosperity and abundance',
-    },
-    {
-      icon: '🎰',
-      title: 'Lucky Spin Energy',
-      description: 'Every moment is a winning spin in the grand casino of life',
-    },
-    {
-      icon: '🏮',
-      title: 'Eternal Celebration',
-      description: 'Join the never-ending festival of wealth and community',
-    },
-  ]
+  const gameSectionRef = useRef<HTMLDivElement>(null)
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-red-900 via-red-950 to-black">
       <style>{`
         .bg-fortune {
           background-image: url('/444background.jpg');
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
-          background-attachment: fixed;
         }
       `}</style>
 
-      <div className="bg-fortune fixed inset-0 -z-10" />
-
       <Marquee text="✦ 444 FORTUNES ✦ PROSPERITY ✦ ABUNDANCE ✦ GOOD LUCK ✦" />
 
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <Particle key={i} delay={i * 0.3} />
-        ))}
-      </div>
-
-      <section className="relative min-h-screen flex items-center px-4 py-20">
+      <section className="relative flex items-center px-4 py-12 bg-fortune" style={{ minHeight: '70vh' }}>
+        <div className="absolute inset-0 bg-black opacity-25" />
         <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
           <motion.div
             className="z-10 flex items-center justify-center"
@@ -219,29 +127,14 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden"
-              style={{
-                background: 'rgba(139, 69, 19, 0.15)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(212, 175, 55, 0.3)',
-                boxShadow: `
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-                  0 8px 16px rgba(0, 0, 0, 0.4),
-                  0 0 0 1px rgba(0, 0, 0, 0.3)
-                `
-              }}
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden mascot-frame"
+              style={{ willChange: 'transform' }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
               whileHover={{
                 scale: 1.05,
-                boxShadow: `
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-                  0 12px 24px rgba(0, 0, 0, 0.5),
-                  0 0 0 1px rgba(0, 0, 0, 0.3)
-                `
+                transition: { duration: 0.2, ease: 'easeOut' }
               }}
             >
               <img
@@ -295,34 +188,13 @@ function App() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              <div
-                className="text-xl md:text-2xl font-bold"
-                style={{
-                  color: '#FFE5B4',
-                  letterSpacing: '3px',
-                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
-                }}
-              >
+              <div className="text-xl md:text-2xl font-bold text-subtitle-gold">
                 PROSPERITY
               </div>
-              <div
-                className="text-xl md:text-2xl font-bold"
-                style={{
-                  color: '#FFE5B4',
-                  letterSpacing: '3px',
-                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
-                }}
-              >
+              <div className="text-xl md:text-2xl font-bold text-subtitle-gold">
                 ABUNDANCE
               </div>
-              <div
-                className="text-xl md:text-2xl font-bold"
-                style={{
-                  color: '#FFE5B4',
-                  letterSpacing: '3px',
-                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
-                }}
-              >
+              <div className="text-xl md:text-2xl font-bold text-subtitle-gold">
                 LUCK
               </div>
             </motion.div>
@@ -352,8 +224,11 @@ function App() {
                 y: 6,
                 boxShadow: '0 2px 0 #B8960B, 0 6px 12px rgba(0, 0, 0, 0.3)'
               }}
+              onClick={() => {
+                gameSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+              }}
             >
-              JOIN THE FORTUNE
+              BUY $FORTUNE
             </motion.button>
           </motion.div>
 
@@ -364,29 +239,14 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden flex items-center justify-center"
-              style={{
-                background: 'rgba(139, 69, 19, 0.15)',
-                backdropFilter: 'blur(10px)',
-                border: '2px solid rgba(212, 175, 55, 0.3)',
-                boxShadow: `
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-                  0 8px 16px rgba(0, 0, 0, 0.4),
-                  0 0 0 1px rgba(0, 0, 0, 0.3)
-                `
-              }}
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-72 lg:h-[26rem] xl:w-80 xl:h-[30rem] rounded-3xl overflow-hidden flex items-center justify-center mascot-frame"
+              style={{ willChange: 'transform' }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.6, type: 'spring' }}
               whileHover={{
                 scale: 1.05,
-                boxShadow: `
-                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
-                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-                  0 12px 24px rgba(0, 0, 0, 0.5),
-                  0 0 0 1px rgba(0, 0, 0, 0.3)
-                `
+                transition: { duration: 0.2, ease: 'easeOut' }
               }}
             >
               <img
@@ -400,77 +260,148 @@ function App() {
         </div>
       </section>
 
-      <section ref={featuresRef} className="relative py-32 px-4">
-        <motion.div
-          className="max-w-7xl mx-auto"
-          initial={{ opacity: 0 }}
-          animate={isVisible ? { opacity: 1 } : {}}
-          transition={{ duration: 0.8 }}
-        >
+      <Marquee text="✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦" />
+
+      <section ref={gameSectionRef} className="relative pt-32 pb-48 px-4">
+        <div className="max-w-7xl mx-auto">
           <motion.h2
-            className="text-5xl md:text-6xl font-black text-center mb-20 text-lucky-gold"
+            className="text-4xl md:text-5xl lg:text-6xl font-black text-center mb-16"
             style={{
-              textShadow: '4px 4px 0 #000, 6px 6px 0 rgba(0,0,0,0.5)',
+              color: '#F4E5C3',
+              textShadow: '2px 2px 0 #C4A137, 3px 3px 8px rgba(0, 0, 0, 0.3)'
             }}
-            initial={{ opacity: 0, y: 50 }}
-            animate={isVisible ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2, duration: 0.8 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
           >
-            THE PATH TO PROSPERITY
+            WILL YOU BE THE MOST FORTUNATE?
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={index}
-                className="group relative bg-gradient-to-br from-prosperity-orange to-fortune-red rounded-3xl p-8 border-8 border-black"
-                initial={{ opacity: 0, y: 50 }}
-                animate={isVisible ? { opacity: 1, y: 0 } : {}}
-                transition={{ delay: 0.4 + index * 0.2, duration: 0.8 }}
-                whileHover={{
-                  y: -10,
-                  boxShadow: '0 20px 60px rgba(255, 215, 0, 0.6)',
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Left Column - How It Works */}
+            <div>
+              <motion.p
+                className="text-center lg:text-left text-2xl md:text-3xl mb-12 font-bold"
+                style={{
+                  color: '#FFE5B4',
+                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
                 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.8 }}
               >
-                <motion.div
-                  className="text-7xl mb-6"
-                  whileHover={{ scale: 1.2, rotate: 360 }}
-                  transition={{ duration: 0.6 }}
+                How It Works
+              </motion.p>
+
+              <div className="space-y-8">
+            <motion.div
+              className="text-left"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              <div className="flex items-start gap-6">
+                <div
+                  className="text-5xl md:text-6xl font-black flex-shrink-0"
+                  style={{
+                    color: '#FFE5B4',
+                    textShadow: '2px 2px 0 #C4A137, 3px 3px 8px rgba(0, 0, 0, 0.3)'
+                  }}
                 >
-                  {feature.icon}
-                </motion.div>
+                  1
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black mb-3" style={{ color: '#FFE5B4' }}>
+                    Purchase $FORTUNE
+                  </h3>
+                  <p className="text-lg md:text-xl" style={{ color: '#F4E5C3', lineHeight: '1.6' }}>
+                    Your wallet, amount purchased and timestamp of tx will be added to the draw.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
-                <h3 className="text-3xl font-black mb-4 text-lucky-gold">
-                  {feature.title}
-                </h3>
+            <motion.div
+              className="text-left"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+            >
+              <div className="flex items-start gap-6">
+                <div
+                  className="text-5xl md:text-6xl font-black flex-shrink-0"
+                  style={{
+                    color: '#FFE5B4',
+                    textShadow: '2px 2px 0 #C4A137, 3px 3px 8px rgba(0, 0, 0, 0.3)'
+                  }}
+                >
+                  2
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black mb-3" style={{ color: '#FFE5B4' }}>
+                    HOLD & WAIT
+                  </h3>
+                  <p className="text-lg md:text-xl" style={{ color: '#F4E5C3', lineHeight: '1.6' }}>
+                    After 20 minutes a snapshot is taken of current holders, amount of tokens held by each wallet, and the time the tx occured.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
-                <p className="text-lg text-white font-bold">
-                  {feature.description}
-                </p>
+            <motion.div
+              className="text-left"
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+            >
+              <div className="flex items-start gap-6">
+                <div
+                  className="text-5xl md:text-6xl font-black flex-shrink-0"
+                  style={{
+                    color: '#FFE5B4',
+                    textShadow: '2px 2px 0 #C4A137, 3px 3px 8px rgba(0, 0, 0, 0.3)'
+                  }}
+                >
+                  3
+                </div>
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black mb-3" style={{ color: '#FFE5B4' }}>
+                    Claim Your Fortune
+                  </h3>
+                  <p className="text-lg md:text-xl" style={{ color: '#F4E5C3', lineHeight: '1.6' }}>
+                    50% of all token volume generated within the 20 minutes will be evenly distributed to 5 holders. Anyone can win, but your odds of winning are GREATLY increased based on hold time and amount held.
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
-                <div className="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-lucky-gold rounded-tr-xl" />
-                <div className="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-lucky-gold rounded-bl-xl" />
-              </motion.div>
-            ))}
+                <motion.p
+                  className="mt-8 text-center lg:text-left italic text-base md:text-lg"
+                  style={{ color: '#F4E5C3', opacity: 0.85, lineHeight: '1.7' }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 0.85 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 1.0, duration: 0.6 }}
+                >
+                  Your entries = Minutes held × % of supply owned. Five winners drawn randomly from the pool.
+                  Example: Hold 1% of supply for 15 minutes = 15 entries. Hold 2% of supply for the full 20 minutes = 40 entries.
+                  Buy more and hold longer for maximum entries.
+                </motion.p>
+              </div>
+            </div>
+
+            {/* Right Column - Countdown Timer */}
+            <div className="lg:sticky lg:top-32">
+              <CountdownTimer />
+            </div>
           </div>
-        </motion.div>
+        </div>
       </section>
-
-      <div className="relative py-20 text-center">
-        <motion.div
-          className="flex justify-center items-center gap-8 mb-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <span className="text-5xl">🌸</span>
-          <span className="text-6xl">福</span>
-          <span className="text-5xl">🌸</span>
-        </motion.div>
-        <p className="text-lucky-gold text-2xl font-black">
-          MAY FORTUNE SMILE UPON YOU
-        </p>
-      </div>
 
       <Marquee text="✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦" />
     </div>

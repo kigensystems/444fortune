@@ -7,11 +7,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        'fortune-red': '#C41E3A',
-        'deep-red': '#8B0000',
-        'lucky-gold': '#FFD700',
-        'rich-gold': '#B8860B',
-        'prosperity-orange': '#FF6B35',
+        'cream-gold': '#F4E5C3',
+        'peach-gold': '#FFE5B4',
+        'antique-gold': '#D4AF37',
+        'dark-gold': '#B8960B',
+        'mid-gold': '#C4A137',
+        'bright-gold': '#FFD700',
+        'dark-red': '#8B0000',
+        'dark-brown': '#8B4513',
       },
       fontFamily: {
         'casino': ['"Poppins"', 'sans-serif'],

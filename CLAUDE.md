@@ -19,6 +19,7 @@
 - **GSAP** (GreenSock) - Professional timeline animations, scroll triggers (ready to integrate)
 - **react-spring** - Physics-based bouncy animations (ready to integrate)
 - **react-icons** - Social media icon components (integrated)
+- **@lottiefiles/dotlottie-react** - Lottie animation player (integrated for countdown visual)
 
 ### Build Pipeline
 - PostCSS + Autoprefixer
@@ -72,9 +73,9 @@
 - **Luxurious feel** - Slow, deliberate animations (40s marquee)
 
 ### Custom Animations (index.css)
-- `particle-float` (4s) - Upward floating golden sparkles
-- `marquee-slow` (40s) - Slow luxurious banner scroll
-- `float`, `shimmer`, `spin-slow` - Available but not currently in use
+- `particle-float` (4s) - Upward floating golden sparkles (available)
+- `marquee-slow` (40s) - Slow luxurious banner scroll (actively used)
+- Removed unused animations: `float`, `shimmer`, `glow-pulse`, `spin-slow`, `marquee` (20s version)
 
 ---
 
@@ -84,11 +85,14 @@
 
 1. **Top Marquee Banner**
    - Infinite slow scrolling ticker (40s cycle)
-   - Antique gold gradient background (matches CTA button)
+   - Antique gold gradient background
    - Dark red embossed text with 3D effect
    - Message: "✦ 444 FORTUNES ✦ PROSPERITY ✦ ABUNDANCE ✦ GOOD LUCK ✦"
+   - Loop-based generation (6 repetitions, no hardcoded duplicates)
 
 2. **Hero Section** (3-Column Layout)
+   - **Background**: Chinese illustrated background (444background.jpg) with 25% black overlay
+   - **Layout**: Mascot | Content | Mascot
    - **LEFT**: Heyyi Mascot
      - Female prosperity goddess in glass-morphism frame
      - Portrait orientation (256-320px wide)
@@ -98,52 +102,74 @@
      - Visual divider (golden gradient line)
      - Stacked subtitle: PROSPERITY / ABUNDANCE / LUCK
      - Social icon button row (Twitter, Telegram, Discord, Website)
-     - Primary CTA: "JOIN THE FORTUNE" (antique gold gradient)
+     - Primary CTA: "BUY $FORTUNE" (antique gold gradient, scrolls to game section)
    - **RIGHT**: CZ Mascot
      - Male fortune bringer in glass-morphism frame
      - Portrait orientation (256-320px wide)
      - Image positioned 6% left (44% horizontal position)
 
    **Mascot Containers:**
-   - Glass morphism effect with subtle brown tint
+   - Glass morphism effect with subtle brown tint (`.mascot-frame`)
    - Semi-transparent golden borders (2px)
    - Inset highlights for beveled edge
    - Hover: slight lift with enhanced shadow
    - Optimized images (1600px, ~1.4-2.5MB each)
 
-3. **Features/Story Section**
-   - 3 story cards in responsive grid (1 col mobile, 3 col desktop)
-   - Gradient backgrounds (gold tones)
-   - Scroll-triggered reveals with stagger
-   - Current stories:
-     - Triple Fortune Power
-     - Lucky Spin Energy
-     - Eternal Celebration
+3. **Middle Marquee Banner**
+   - Section divider between hero and game section
+   - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
 
-4. **Footer Blessing**
-   - Decorative flowers + 福 character
-   - Blessing text
+4. **Game Section** (Two-Column Layout on Desktop)
+   - **Background**: Clean dark gradient (red-900 → red-950 → black)
+   - **Title**: "WILL YOU BE THE MOST FORTUNATE?"
+   - **Desktop Layout (≥lg)**: Side-by-side columns
+     - **LEFT**: How It Works (3 numbered steps + formula)
+     - **RIGHT**: Countdown Timer (sticky positioned, stays visible while scrolling)
+   - **Mobile Layout**: Stacked vertically
+
+   **How It Works Steps:**
+   1. Purchase $FORTUNE
+      - Your wallet, amount purchased and timestamp of tx will be added to the draw
+   2. HOLD & WAIT
+      - After 20 minutes a snapshot is taken of current holders, amount of tokens, and tx time
+   3. Claim Your Fortune
+      - 50% of all volume distributed evenly to 5 holders
+      - Odds greatly increased by hold time and amount held
+
+   **Fortune Formula Disclaimer** (italic text):
+   - Your entries = Minutes held × % of supply owned
+   - Five winners drawn randomly from the pool
+   - Example calculations showing entry multipliers
+
+   **CountdownTimer Component:**
+   - "NEXT FORTUNE DRAW" subtitle
+   - 20-minute countdown (MM:SS format, cream gold color)
+   - Lottie coin animation (max-w-lg size)
+   - Dynamic message: "Hold strong, prosperity approaches" or "Fortune favors the ready..."
+   - Pulse animation when < 10 seconds remaining
 
 5. **Bottom Marquee Banner**
-   - Similar to top ticker
    - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
 
 ### Reusable Components
 
-**Particle**
-- Golden dots with randomized positions
-- 20 instances with opacity + scale animation
-- Creates subtle sparkle effect throughout page
-
 **Marquee**
 - Takes text prop
-- Duplicates text for seamless infinite scroll
+- Loop-based generation (6 repetitions × 2 for seamless scroll)
 - 40s animation cycle (slow, luxurious)
-- Antique gold gradient with embossed text
+- Antique gold gradient background (`.bg-marquee-gold`)
+- Dark red embossed text (`.marquee-text`)
+
+**CountdownTimer**
+- 20-minute auto-resetting timer
+- Lottie animation from lottie.host
+- Cream gold countdown text with 3D shadow
+- Conditional message based on time remaining
+- Pulse animation at < 10 seconds
 
 **SocialButton**
 - Icon component from react-icons
-- Antique gold gradient background with 3D raised effect
+- Antique gold gradient background with 3D raised effect (`.social-button-3d`)
 - Rounded square (16px border-radius)
 - Hover: press down effect (reduces shadow)
 - Props: icon, href, label
@@ -152,22 +178,31 @@
 
 ## Background & Visual Effects
 
-### Background
-- Custom illustrated background image: `444background.png`
+### Background Strategy
+**Hero Section Only:**
+- Custom illustrated background image: `444background.jpg`
 - Features: golden Chinese clouds, hanging lanterns, scattered coins, flowers
 - Illustrated/cartoon style matching overall aesthetic
-- Fixed attachment, cover sizing for responsive display
-- Red gradient with golden decorative elements
+- 25% black overlay to reduce visual noise
+- Applied only to hero section (not site-wide)
 
-### Layered Effects (z-index order, back to front)
-1. Background image (444background.jpg) - fixed position
-2. Golden particle sparkles (20 particles) - subtle movement
-3. Content sections
+**Rest of Site:**
+- Clean dark gradient: `bg-gradient-to-b from-red-900 via-red-950 to-black`
+- No background image to keep focus on game mechanics
 
-### Text Effects
-- Clean 3D depth using layered text-shadow (NO glow effects)
-- Cream (#F4E5C3) fills with gold shadows
-- All effects defined in index.css utility classes (.fortune-text, .fortune-number, .social-button-3d, .cta-button-3d)
+### CSS Utility Classes (index.css)
+**Text Effects:**
+- `.fortune-text` - Clean 3D depth for "FORTUNES" (cream fill, gold shadows)
+- `.fortune-number` - Clean 3D depth for "444" (cream fill, gold shadows)
+- `.text-subtitle-gold` - Subtitle styling (peach gold with brown shadow)
+
+**Component Styles:**
+- `.bg-marquee-gold` - Marquee background gradient
+- `.marquee-text` - Embossed marquee text
+- `.social-button-3d` - Social button gradient with chunky shadow
+- `.cta-button-3d` - CTA button with deep 3D press effect
+- `.glass-card-gold` - Enhanced glass morphism cards (stronger borders, glow, inset highlights)
+- `.mascot-frame` - Glass morphism mascot containers
 
 ---
 
@@ -196,36 +231,47 @@
 
 ## Current State & Pending Work
 
-### ✅ Completed (v2 - Elegant Gold Update)
-**Design System Overhaul:**
-- Replaced bright ketchup-mustard colors with sophisticated gold + cream palette
+### ✅ Completed
+
+**v3 - Game Mechanics & Layout Improvements:**
+- Replaced MoneyBagGrowth component with Lottie coin animation
+- Two-column desktop layout (steps left, countdown right with sticky positioning)
+- Comprehensive game mechanics documentation (3 clear steps)
+- Fortune formula with ticket-based entry system (Minutes × % Supply)
+- Background limited to hero section only (25% overlay)
+- Clean dark gradient for game section
+- Removed decorative footer elements
+- Middle marquee banner as section divider
+- Code refactoring: ~163 lines reduced, cleaner utilities
+
+**v2 - Elegant Gold Update:**
+- Replaced bright colors with sophisticated gold + cream palette
 - Clean 3D depth effects (removed all glow)
 - Poppins font with simplified text shadows
 - Antique gold gradients throughout (buttons, banners)
-
-**Layout & Components:**
 - 3-column hero layout (mascot | content | mascot)
 - Glass morphism mascot frames with golden borders
-- Stacked subtitle with proper hierarchy
-- Golden divider line between title and subtitle
 - Slow marquee animation (40s) with embossed text
 - Social buttons with 3D raised effect
 - CTA button with chunky 3D press effect
 
 **Performance:**
 - Optimized mascot images (5.5MB → 1.4-2.5MB at 1600px)
-- Removed backdrop-filter initially (caused lag, re-added for glass effect)
 - Responsive breakpoints: mobile (256px) → XL (320px)
+- Removed unused CSS animations
+- Loop-based Marquee component (no hardcoded repetitions)
 
 **Assets:**
-- Illustrated background (444background.jpg, 2.4MB)
+- Illustrated background (444background.jpg, 2.4MB) - hero section only
 - Optimized mascots (heyyi.png 2.5MB, cz.png 1.4MB at 1600px)
-- Removed original 5MB+ backups
+- Lottie animation hosted on lottie.host
 
 ### 📋 Potential Future Enhancements
-- Additional decorative SVG elements (floating clouds, coins)
-- Mascot variations/poses for different sections
-- Custom icon set for features section
+- Smart contract integration for actual draws
+- Live wallet connection (Web3/ethers.js)
+- Real-time holder statistics
+- Winner history display
+- Blockchain transaction verification
 
 ### 🚀 Advanced Animation Ideas (Dependencies Installed)
 GSAP and react-spring are installed but not yet integrated. Potential uses:
@@ -280,19 +326,23 @@ GSAP and react-spring are installed but not yet integrated. Potential uses:
 ```
 /444 Fortune/
 ├── public/
-│   ├── 444background.jpg # Illustrated background (upscaled)
+│   ├── 444background.jpg # Illustrated background (hero section only)
 │   ├── heyyi.png         # Female prosperity mascot
 │   └── cz.png            # Male fortune mascot
 ├── src/
-│   ├── App.tsx           # Main component (all sections, ~260 lines)
+│   ├── App.tsx           # Main component (~400 lines)
+│   │                     # - Marquee, CountdownTimer, SocialButton components
+│   │                     # - Hero section, Game section with 2-col layout
 │   ├── main.tsx          # React entry point
-│   ├── index.css         # Global styles + animations + text effects
+│   ├── index.css         # Global styles + animations + utility classes
+│   │                     # - Reduced unused animations
+│   │                     # - Added reusable utility classes
 │   └── vite-env.d.ts     # Vite types
 ├── dist/                 # Build output (gitignored)
 ├── index.html            # HTML template (includes Poppins font)
-├── tailwind.config.js    # Casino color palette + font config
+├── tailwind.config.js    # Updated color palette (actual design tokens)
 ├── vite.config.ts        # Build config
-├── package.json          # Dependencies (gsap, react-spring, react-icons)
+├── package.json          # Dependencies (gsap, react-spring, react-icons, @lottiefiles/dotlottie-react)
 └── CLAUDE.md             # This file - project documentation
 ```
 
@@ -318,9 +368,11 @@ Before marking any task complete:
 
 - This is a **single-page application** (no routing needed)
 - **Vision is evolving** - building iteratively, requirements will change
-- Design philosophy: Elegant gold aesthetic with luxurious feel (not overly busy)
+- Design philosophy: Elegant gold aesthetic with luxurious feel, clean game section without distractions
 - Social media links currently point to "#" - update when available
 - CZ mascot positioned 6% left (44% horizontal) to account for wider image dimensions
+- Background strategy: Hero has illustrated background, game section uses clean gradient
+- Game mechanics use simple ticket formula: Minutes held × % supply owned = entries
 
 ---
 
