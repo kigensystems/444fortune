@@ -29,10 +29,9 @@
 
 ## Design System
 
-### Brand Colors (Tailwind Theme + Custom)
-**Updated Palette - Gold + Cream Elegance:**
+### Brand Colors
+**Current Palette - Elegant Gold + Cream:**
 ```javascript
-// Primary Colors
 '#F4E5C3' - Cream/champagne gold (main titles, borders)
 '#FFE5B4' - Peach/light gold (gradients, highlights)
 '#D4AF37' - Antique gold (gradients, accents)
@@ -40,13 +39,6 @@
 '#C4A137' - Mid gold (text shadows)
 '#8B0000' - Dark red (text on gold backgrounds)
 '#8B4513' - Dark brown (text shadows, depth)
-
-// Tailwind Config (legacy - being phased out)
-'fortune-red': '#C41E3A'
-'deep-red': '#8B0000'
-'lucky-gold': '#FFD700'
-'rich-gold': '#B8860B'
-'prosperity-orange': '#FF6B35'
 ```
 
 ### Typography
@@ -65,28 +57,24 @@
 - Both use 2-layer shadow progression (no glow effects)
 
 **Typography Scale:**
-- Hero number "444": `text-9xl` with `.fortune-number` class
-- Hero headline: `text-7xl md:text-8xl` with `.fortune-text` class
+- Hero number "444": `text-8xl md:text-9xl`
+- Hero headline: `text-6xl md:text-7xl`
+- Subtitle words: `text-xl md:text-2xl`
 - Section titles: `text-5xl md:text-6xl`
-- Taglines: `text-3xl md:text-4xl`
 - Body text: `text-lg`
 - Always use Tailwind scale values (no arbitrary sizes)
 
 ### Animation Philosophy
-- **Continuous motion** - Floating coins, scrolling marquees, particles
+- **Continuous motion** - Slow scrolling marquees, floating particles
 - **GPU-accelerated** - Transform and opacity only for 60fps
 - **Scroll-triggered reveals** - Intersection Observer for feature cards
-- **Hover microinteractions** - Lift, scale, rotate, bounce effects
-- **Energetic memecoin feel** - Always moving, alive, celebratory
+- **Hover microinteractions** - Lift effects on mascots, 3D press on buttons
+- **Luxurious feel** - Slow, deliberate animations (40s marquee)
 
 ### Custom Animations (index.css)
-- `float` (6s) - Vertical float + rotation for decorative elements
-- `shimmer` (3s) - Gradient text shimmer
-- `particle-float` (4s) - Upward particle rise
-- `glow-pulse` (2s) - Button/text glow effect (deprecated - not in use)
-- `spin-slow` (20s) - Slow rotation for decorative elements
-- `marquee` (20s) - Fast horizontal scroll for ticker text
-- `marquee-slow` (40s) - Slow luxurious scroll (current banner speed)
+- `particle-float` (4s) - Upward floating golden sparkles
+- `marquee-slow` (40s) - Slow luxurious banner scroll
+- `float`, `shimmer`, `spin-slow` - Available but not currently in use
 
 ---
 
@@ -125,8 +113,7 @@
 
 3. **Features/Story Section**
    - 3 story cards in responsive grid (1 col mobile, 3 col desktop)
-   - Gradient backgrounds (prosperity-orange → fortune-red)
-   - Black borders, corner accents
+   - Gradient backgrounds (gold tones)
    - Scroll-triggered reveals with stagger
    - Current stories:
      - Triple Fortune Power
@@ -143,20 +130,22 @@
 
 ### Reusable Components
 
-**Particle** (lines 5-27)
+**Particle**
 - Golden dots with randomized positions
 - 20 instances with opacity + scale animation
 - Creates subtle sparkle effect throughout page
 
-**Marquee** (lines 29-50)
+**Marquee**
 - Takes text prop
 - Duplicates text for seamless infinite scroll
-- CSS animation-based
+- 40s animation cycle (slow, luxurious)
+- Antique gold gradient with embossed text
 
-**SocialButton** (lines 52-66)
+**SocialButton**
 - Icon component from react-icons
-- Gold background, black border, rounded square
-- Hover: lifts and scales
+- Antique gold gradient background with 3D raised effect
+- Rounded square (16px border-radius)
+- Hover: press down effect (reduces shadow)
 - Props: icon, href, label
 
 ---
@@ -176,10 +165,9 @@
 3. Content sections
 
 ### Text Effects
-- Multi-layered shadows for 3D depth
-- Glowing outlines using text-shadow
-- -webkit-text-stroke for clean outlines
-- All effects defined in index.css utility classes
+- Clean 3D depth using layered text-shadow (NO glow effects)
+- Cream (#F4E5C3) fills with gold shadows
+- All effects defined in index.css utility classes (.fortune-text, .fortune-number, .social-button-3d, .cta-button-3d)
 
 ---
 
@@ -234,69 +222,56 @@
 - Optimized mascots (heyyi.png 2.5MB, cz.png 1.4MB at 1600px)
 - Removed original 5MB+ backups
 
-### 🎨 Assets
-1. **Background Image** ✅ COMPLETED
-   - File: `public/444background.jpg` (upscaled version)
-   - Illustrated style with Chinese clouds, lanterns, coins, flowers
-   - Red and gold color scheme
-   - Integrated with fixed positioning
+### 📋 Potential Future Enhancements
+- Additional decorative SVG elements (floating clouds, coins)
+- Mascot variations/poses for different sections
+- Custom icon set for features section
 
-2. **Mascot Illustrations** ✅ COMPLETED
-   - **heyyi.png** - Female prosperity goddess character
-     - Traditional Chinese outfit with ornate headdress
-     - Holding golden bowl of prosperity
-     - Illustrated cartoon style
-   - **cz.png** - Male fortune bringer with glasses
-     - Modern twist on traditional prosperity character
-     - Also holding golden bowl
-     - Quirky, memorable design for crypto space
-   - **Integration:** Both mascots displayed side by side in hero section
-   - **Animations:** Spring entrance with stagger, hover tilt effects
-   - **Sizing:** 256px (mobile) → 320px (desktop)
+### 🚀 Advanced Animation Ideas (Dependencies Installed)
+GSAP and react-spring are installed but not yet integrated. Potential uses:
 
-3. **Potential Future Assets**
-   - Additional decorative SVG elements
-   - Mascot variations/poses
-   - Custom icon set for features
+**GSAP:**
+- Number counter animation (0 → 444 on load)
+- Stagger animations for social buttons
+- Advanced scroll triggers
+- Timeline-based entrance effects
 
-### 🚀 Future Enhancements (Not Yet Implemented)
-- **GSAP integration:**
-  - Number counter animation (0 → 444 on load)
-  - Stagger animations for social buttons
-  - Advanced scroll triggers
-  - Timeline-based entrance effects
+**react-spring:**
+- Physics-based button hover bounces
+- Spring animations on card interactions
+- Mouse-follow particle effects
 
-- **react-spring integration:**
-  - Physics-based button hover bounces
-  - Spring animations on card interactions
-  - Mouse-follow particle effects
-
-- **Additional effects:**
-  - Sparkle burst on button click
-  - Floating Chinese cloud SVGs
-  - More particle variety
-  - Background texture overlay
+**Additional effects:**
+- Sparkle burst on button click
+- More particle variety
+- Texture overlays
 
 ---
 
 ## Design Inspirations
 
-Based on memecoin landing page examples featuring:
+**Memecoin Landing Pages:**
 - Split hero layouts with large mascot characters
-- Vibrant yellow/orange sunburst gradients
 - Marquee ticker text at top/bottom
-- Comic book style text with multiple strokes
+- Comic book style text with 3D depth
 - Social icon button rows
 - Story/feature card sections with illustrations
-- High-energy, playful aesthetic
+- Energetic, playful aesthetic
 
-And "88 Fortunes" slot machine aesthetic:
-- Multi-layered text effects (red, gold, white, shadow)
-- Sparkle/glow effects around elements
+**"88 Fortunes" Slot Machine:**
+- Multi-layered text effects for 3D depth
 - Chinese prosperity goddess imagery
 - Gold ingot stacks and coins
-- Red and gold color harmony
+- Elegant gold color harmony
 - Celebration of wealth and luck
+- Luxurious casino feel
+
+**V2 Design Evolution:**
+- Moved away from "ketchup and mustard" bright colors
+- Adopted sophisticated gold + cream palette
+- Clean 3D effects without glow
+- Glass morphism elements
+- Slower, more deliberate animations
 
 ---
 
@@ -342,12 +317,10 @@ Before marking any task complete:
 ## Notes
 
 - This is a **single-page application** (no routing needed)
-- Focus on **memecoin energy** and **casino excitement**
 - **Vision is evolving** - building iteratively, requirements will change
-- Design philosophy: Bold, vibrant, energetic (not overly busy)
+- Design philosophy: Elegant gold aesthetic with luxurious feel (not overly busy)
 - Social media links currently point to "#" - update when available
-- Mascot images have cropped edges - bordered boxes hide this intentionally
-- Background elements in mascot images should be removed in future iterations
+- CZ mascot positioned 6% left (44% horizontal) to account for wider image dimensions
 
 ---
 
@@ -360,7 +333,7 @@ Before marking any task complete:
 - Website (FaGlobe icon)
 
 **To Update:**
-Replace `href="#"` in SocialButton components (App.tsx lines 198-201) with actual URLs when available.
+Replace `href="#"` in SocialButton components (App.tsx) with actual URLs when available.
 
 ---
 
