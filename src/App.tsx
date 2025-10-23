@@ -28,22 +28,22 @@ function Particle({ delay = 0 }) {
 
 function Marquee({ text }: { text: string }) {
   return (
-    <div className="overflow-hidden whitespace-nowrap bg-lucky-gold py-3">
-      <div className="inline-block animate-marquee">
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
+    <div className="overflow-hidden whitespace-nowrap bg-gradient-to-r from-rich-gold via-amber-700 to-rich-gold py-5 shadow-inner">
+      <div className="inline-block animate-marquee-slow">
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
       </div>
-      <div className="inline-block animate-marquee">
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
-        <span className="text-2xl font-black text-fortune-red mx-8">{text}</span>
+      <div className="inline-block animate-marquee-slow">
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
+        <span className="text-xl font-bold text-amber-50 mx-12 drop-shadow-md">{text}</span>
       </div>
     </div>
   )
@@ -55,7 +55,12 @@ function SocialButton({ icon: Icon, href, label }: { icon: any; href: string; la
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="w-16 h-16 bg-lucky-gold border-4 border-black rounded-2xl flex items-center justify-center text-black text-2xl"
+      className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl"
+      style={{
+        background: 'linear-gradient(135deg, #D4AF37 0%, #F4E5C3 100%)',
+        color: '#8B0000',
+        border: '3px solid #FFF8DC'
+      }}
       whileHover={{ scale: 1.1, y: -4 }}
       whileTap={{ scale: 0.95 }}
       aria-label={label}
@@ -127,72 +132,15 @@ function App() {
       </div>
 
       <section className="relative min-h-screen flex items-center px-4 py-20">
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
           <motion.div
-            className="z-10 text-left"
+            className="z-10 flex items-center justify-center"
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="fortune-number text-9xl mb-6"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1, type: 'spring', bounce: 0.5 }}
-            >
-              444
-            </motion.div>
-
-            <motion.h1
-              className="fortune-text text-7xl md:text-8xl mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              FORTUNES
-            </motion.h1>
-
-            <motion.p
-              className="text-3xl md:text-4xl text-lucky-gold mb-8 font-black"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
-            >
-              PROSPERITY • ABUNDANCE • LUCK
-            </motion.p>
-
-            <motion.div
-              className="flex gap-4 mb-12"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: 0.6 }}
-            >
-              <SocialButton icon={FaTwitter} href="#" label="Twitter" />
-              <SocialButton icon={FaTelegramPlane} href="#" label="Telegram" />
-              <SocialButton icon={FaDiscord} href="#" label="Discord" />
-              <SocialButton icon={FaGlobe} href="#" label="Website" />
-            </motion.div>
-
-            <motion.button
-              className="px-12 py-6 text-2xl font-black text-fortune-red bg-lucky-gold border-4 border-black rounded-full animate-glow"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.9, duration: 0.6 }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              JOIN THE FORTUNE
-            </motion.button>
-          </motion.div>
-
-          <motion.div
-            className="z-10 flex items-center justify-center gap-8 lg:gap-12"
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <motion.div
-              className="relative w-full max-w-md h-72 md:max-w-2xl md:h-80 lg:max-w-3xl lg:h-96 xl:max-w-4xl xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
@@ -204,9 +152,79 @@ function App() {
                 className="w-full h-full object-cover"
               />
             </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="z-10 text-center"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <motion.div
+              className="fortune-number text-8xl md:text-9xl mb-6"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1, type: 'spring', bounce: 0.5 }}
+            >
+              444
+            </motion.div>
+
+            <motion.h1
+              className="fortune-text text-6xl md:text-7xl mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              FORTUNES
+            </motion.h1>
+
+            <motion.p
+              className="text-2xl md:text-3xl mb-8 font-black"
+              style={{ color: '#FFF8DC' }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            >
+              PROSPERITY • ABUNDANCE • LUCK
+            </motion.p>
 
             <motion.div
-              className="relative w-full max-w-md h-72 md:max-w-2xl md:h-80 lg:max-w-3xl lg:h-96 xl:max-w-4xl xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
+              className="flex gap-4 mb-12 justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7, duration: 0.6 }}
+            >
+              <SocialButton icon={FaTwitter} href="#" label="Twitter" />
+              <SocialButton icon={FaTelegramPlane} href="#" label="Telegram" />
+              <SocialButton icon={FaDiscord} href="#" label="Discord" />
+              <SocialButton icon={FaGlobe} href="#" label="Website" />
+            </motion.div>
+
+            <motion.button
+              className="px-12 py-6 text-2xl font-black rounded-full shadow-lg"
+              style={{
+                background: 'linear-gradient(135deg, #D4AF37 0%, #F4E5C3 100%)',
+                color: '#8B0000',
+                border: '3px solid #FFF8DC'
+              }}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.9, duration: 0.6 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              JOIN THE FORTUNE
+            </motion.button>
+          </motion.div>
+
+          <motion.div
+            className="z-10 flex items-center justify-center"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.6, type: 'spring' }}

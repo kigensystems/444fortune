@@ -41,9 +41,10 @@
 ### Typography
 
 **Display Font:**
-- **Black Ops One** (Google Fonts) - Casino/military stencil style
-- Used for: "444 FORTUNES" headline, major numbers
-- Class: `font-casino`
+- **Poppins** (Google Fonts) - Modern bold sans-serif
+- Used for: "444 FORTUNES" headline, major numbers, all text
+- Class: `font-casino` and `font-sans` (both configured)
+- Weights: 400, 500, 600, 700, 800, 900
 
 **Text Effects:**
 - `.fortune-text` - Multi-stroke effect for "FORTUNES" text
@@ -188,7 +189,7 @@
 
 ### ✅ Completed (v1 Foundation)
 - Casino red/gold color palette implemented
-- Black Ops One font integrated with multi-stroke text effects
+- Poppins font integrated with multi-stroke text effects
 - Illustrated background image (444background.jpg)
 - Split hero layout with dual mascots (heyyi.png + cz.png)
 - Mascots in landscape bordered boxes with transparent backgrounds
@@ -279,7 +280,7 @@ And "88 Fortunes" slot machine aesthetic:
 │   ├── index.css         # Global styles + animations + text effects
 │   └── vite-env.d.ts     # Vite types
 ├── dist/                 # Build output (gitignored)
-├── index.html            # HTML template (includes Black Ops One font)
+├── index.html            # HTML template (includes Poppins font)
 ├── tailwind.config.js    # Casino color palette + font config
 ├── vite.config.ts        # Build config
 ├── package.json          # Dependencies (gsap, react-spring, react-icons)

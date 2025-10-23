@@ -14,7 +14,8 @@ export default {
         'prosperity-orange': '#FF6B35',
       },
       fontFamily: {
-        'casino': ['"Black Ops One"', 'cursive'],
+        'casino': ['"Poppins"', 'sans-serif'],
+        'sans': ['"Poppins"', 'sans-serif'],
       },
     },
   },

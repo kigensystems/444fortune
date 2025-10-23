@@ -93,35 +93,21 @@
     animation: marquee 20s linear infinite;
   }
 
+  .animate-marquee-slow {
+    animation: marquee 40s linear infinite;
+  }
+
   .fortune-text {
-    font-family: 'Black Ops One', cursive;
-    color: #C41E3A;
-    -webkit-text-stroke: 4px #FFD700;
-    text-shadow:
-      0 0 20px #FFD700,
-      -2px -2px 0 #FFF,
-      2px -2px 0 #FFF,
-      -2px 2px 0 #FFF,
-      2px 2px 0 #FFF,
-      6px 6px 0 #000,
-      8px 8px 0 rgba(0,0,0,0.5),
-      0 0 40px rgba(255, 215, 0, 0.8),
-      0 0 60px rgba(255, 215, 0, 0.4);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    color: #F4E5C3;
+    text-shadow: 3px 3px 0 #8B4513;
   }
 
   .fortune-number {
-    font-family: 'Black Ops One', cursive;
-    color: #FFD700;
-    -webkit-text-stroke: 6px #C41E3A;
-    text-shadow:
-      0 0 30px #FFD700,
-      -3px -3px 0 #FFF,
-      3px -3px 0 #FFF,
-      -3px 3px 0 #FFF,
-      3px 3px 0 #FFF,
-      8px 8px 0 #000,
-      12px 12px 0 rgba(0,0,0,0.5),
-      0 0 60px rgba(255, 215, 0, 1),
-      0 0 80px rgba(255, 215, 0, 0.6);
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    color: #F4E5C3;
+    text-shadow: 3px 3px 0 #8B4513;
   }
 }
