@@ -141,11 +141,30 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl overflow-hidden"
+              style={{
+                background: 'rgba(139, 69, 19, 0.15)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(212, 175, 55, 0.3)',
+                boxShadow: `
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                  0 8px 16px rgba(0, 0, 0, 0.4),
+                  0 0 0 1px rgba(0, 0, 0, 0.3)
+                `
+              }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: `
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                  0 12px 24px rgba(0, 0, 0, 0.5),
+                  0 0 0 1px rgba(0, 0, 0, 0.3)
+                `
+              }}
             >
               <img
                 src="/heyyi.png"
@@ -161,64 +180,69 @@ function App() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <motion.div
-              className="fortune-number text-8xl md:text-9xl mb-6"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 1, type: 'spring', bounce: 0.5 }}
-            >
-              444
-            </motion.div>
+            <div className="mb-12">
+              <motion.div
+                className="fortune-number text-8xl md:text-9xl mb-4"
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ duration: 1, type: 'spring', bounce: 0.5 }}
+              >
+                444
+              </motion.div>
 
-            <motion.h1
-              className="fortune-text text-6xl md:text-7xl mb-8"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            >
-              FORTUNES
-            </motion.h1>
+              <motion.h1
+                className="fortune-text text-6xl md:text-7xl"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+              >
+                FORTUNES
+              </motion.h1>
+            </div>
 
             <motion.div
-              className="mb-8 space-y-3 flex flex-col items-center"
+              className="w-24 h-px mx-auto mb-10"
+              style={{
+                background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)',
+                boxShadow: '0 1px 3px rgba(212, 175, 55, 0.5)'
+              }}
+              initial={{ opacity: 0, scaleX: 0 }}
+              animate={{ opacity: 1, scaleX: 1 }}
+              transition={{ delay: 0.5, duration: 0.8 }}
+            />
+
+            <motion.div
+              className="mb-12 space-y-2 flex flex-col items-center"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.5, duration: 0.8 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
             >
               <div
-                className="text-3xl md:text-4xl font-black"
+                className="text-xl md:text-2xl font-bold"
                 style={{
                   color: '#FFE5B4',
-                  letterSpacing: '4px',
-                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                  letterSpacing: '3px',
+                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 PROSPERITY
               </div>
               <div
-                className="w-12 h-1 rounded-full"
-                style={{ background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)' }}
-              />
-              <div
-                className="text-3xl md:text-4xl font-black"
+                className="text-xl md:text-2xl font-bold"
                 style={{
                   color: '#FFE5B4',
-                  letterSpacing: '4px',
-                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                  letterSpacing: '3px',
+                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 ABUNDANCE
               </div>
               <div
-                className="w-12 h-1 rounded-full"
-                style={{ background: 'linear-gradient(90deg, transparent, #D4AF37, transparent)' }}
-              />
-              <div
-                className="text-3xl md:text-4xl font-black"
+                className="text-xl md:text-2xl font-bold"
                 style={{
                   color: '#FFE5B4',
-                  letterSpacing: '4px',
-                  textShadow: '2px 2px 0 #8B4513, 3px 3px 8px rgba(0, 0, 0, 0.5)'
+                  letterSpacing: '3px',
+                  textShadow: '1px 1px 0 #8B4513, 2px 2px 4px rgba(0, 0, 0, 0.3)'
                 }}
               >
                 LUCK
@@ -262,11 +286,30 @@ function App() {
             transition={{ duration: 0.8 }}
           >
             <motion.div
-              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl border-8 border-black overflow-hidden bg-transparent"
+              className="relative w-64 h-80 md:w-72 md:h-96 lg:w-64 lg:h-80 xl:w-80 xl:h-[28rem] rounded-3xl overflow-hidden"
+              style={{
+                background: 'rgba(139, 69, 19, 0.15)',
+                backdropFilter: 'blur(10px)',
+                border: '2px solid rgba(212, 175, 55, 0.3)',
+                boxShadow: `
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                  0 8px 16px rgba(0, 0, 0, 0.4),
+                  0 0 0 1px rgba(0, 0, 0, 0.3)
+                `
+              }}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.6, type: 'spring' }}
-              whileHover={{ scale: 1.05 }}
+              whileHover={{
+                scale: 1.05,
+                boxShadow: `
+                  inset 0 1px 0 rgba(255, 255, 255, 0.2),
+                  inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+                  0 12px 24px rgba(0, 0, 0, 0.5),
+                  0 0 0 1px rgba(0, 0, 0, 0.3)
+                `
+              }}
             >
               <img
                 src="/cz.png"
