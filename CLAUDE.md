@@ -133,48 +133,56 @@
    - Section divider between hero and game section
    - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
 
-4. **Game Section** (Single Column, Timer-First Layout)
+4. **Game Section** (Two-Column Layout on Desktop)
    - **Background**: Illustrated background (gamebackground.jpg) with 25% black overlay
-   - **Title**: "WILL YOU BE THE MOST FORTUNATE?"
-   - **Layout Order**:
-     1. Countdown Timer (horizontal layout)
-     2. "How It Works" heading
-     3. Three step cards (single column, centered, max-w-5xl)
+   - **Layout**: Two-column grid (`grid-cols-1 md:grid-cols-2`)
+     - **Left Column**: Countdown card with pot size and progress
+     - **Right Column**: Compact stepper "How It Works"
+   - Mobile: Single column (stacked)
+   - Desktop: Side-by-side columns
 
-   **Countdown Timer** (Horizontal 3-Part Layout):
-   - Switches from vertical (mobile) to horizontal (md:)
-   - **Left**: "NEXT FORTUNE DRAW" label + dynamic message
-   - **Center**: Large countdown (MM:SS format, cream gold color)
-   - **Right**: Lottie coin animation
-   - Wrapped in subtle `.mascot-frame` glass card
+   **Countdown Card** (Left Column):
+   - **TIME REMAINING** title
+   - Large countdown display (MM:SS format)
+   - Progress bar showing elapsed time (0-20 minutes)
+     - Dark brown background with antique gold gradient fill
+     - Animates as timer counts down
+   - **Current Pot** section:
+     - Label: "Current Pot"
+     - Amount: "$12,847" (placeholder)
+   - Wrapped in `.mascot-frame` glass card
    - GSAP number counter animation on digit changes
    - Pulse animation when < 10 seconds remaining
 
-   **How It Works Steps:**
-   Each step wrapped in `.mascot-frame` glass card with GSAP stagger reveal:
+   **Compact Stepper** (Right Column):
+   - Wrapped in `.mascot-frame` glass card
+   - "How It Works" title
+   - Three steps with circular numbered badges (gold gradient, dark red text)
+   - Steps use horizontal layout (number badge + content)
 
-   1. **Purchase $FORTUNE**
-      - Your wallet, amount purchased and timestamp of tx will be added to the draw
+   1. **PURCHASE $FORTUNE**
+      - Wallet address, amount, and timestamp recorded
 
    2. **HOLD & WAIT**
-      - After 20 minutes a snapshot is taken of current holders, amount of tokens, and tx time
+      - When timer expires a snapshot is taken: all holders, balances, and transaction times
 
-   3. **Receive Your Fortune**
-      - 50% of all token volume automatically distributed to 5 holders
-      - Odds greatly increased by hold time and amount held
+   3. **RECEIVE YOUR FORTUNE**
+      - 50% of volume auto-distributed to 5 winners. Odds weighted by hold time and amount
 
-   **Step Numbers:**
-   - react-spring physics-based hover effects
-   - Bouncy scale + lift on interaction
-   - Responsive sizing: `text-5xl md:text-6xl xl:text-7xl`
+   **Fortune Formula** (fine print at bottom of stepper):
+   - Entries = Minutes held × % of supply. Example: 1% for 15min = 15 entries, 2% for 20min = 40 entries
+   - Minimized styling: `text-sm md:text-base`, opacity 0.5
 
-   **Fortune Formula Disclaimer** (fine print):
-   - Your entries = Minutes held × % of supply owned
-   - Five winners drawn randomly from the pool
-   - Example calculations showing entry multipliers
-   - Minimized styling: `text-sm md:text-base`, opacity 0.6
+5. **Sticky Mini-Bar**
+   - Fixed position at top of viewport
+   - Appears after scrolling 800px down the page
+   - Gold gradient background (matches marquee)
+   - **Content**: Countdown (MM:SS) | Pot: $12,847 (hidden on mobile) | BUY $FORTUNE button
+   - Dark red gradient button with 3D press effect
+   - Slides in/out with smooth animation (y: -100 to 0)
+   - z-index: 50 (above all content)
 
-5. **Bottom Marquee Banner**
+6. **Bottom Marquee Banner**
    - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
 
 ### Reusable Components
@@ -187,18 +195,28 @@
 - Dark red embossed text (`.marquee-text`)
 
 **CountdownTimer**
-- 20-minute auto-resetting timer
-- Horizontal 3-part layout (label | countdown | lottie)
+- Receives `timeLeft` prop from parent App component
+- Displays large countdown (MM:SS format)
+- Progress bar animating 0-100% over 20 minutes
+- Current Pot display ($12,847 placeholder)
 - GSAP animations for rolling digit transitions
-- Lottie animation from lottie.host
-- Conditional message based on time remaining
 - Pulse animation at < 10 seconds
+- Wrapped in `.mascot-frame` glass card
 
-**StepNumber**
-- react-spring physics-based component
-- Bouncy hover effect with scale + translateY
-- Config: tension 300, friction 10
-- Used for numbered steps (1, 2, 3)
+**CompactStepper**
+- Displays "How It Works" in compact format
+- Three steps with circular numbered badges
+- Badges: Gold gradient background, dark red text, 3D shadow
+- Horizontal layout: badge (40-48px) + content
+- Step text condensed but maintains technical credibility
+- Fortune formula at bottom as fine print
+
+**StickyMiniBar**
+- Receives `timeLeft` prop from parent App component
+- Shows/hides based on scroll position (800px threshold)
+- Displays countdown, pot amount (desktop only), and buy button
+- Smooth slide-in animation (Framer Motion)
+- Gold gradient background matching marquee aesthetic
 
 **SocialButton**
 - Icon component from react-icons
@@ -246,14 +264,23 @@
 
 ### ✅ Completed Features
 
+**v5 - Two-Column Game Section + Sticky Mini-Bar:**
+- Two-column layout for game section (countdown | stepper) on desktop
+- Countdown card with progress bar and current pot display
+- Compact stepper with circular numbered badges
+- Sticky mini-bar appears at 800px scroll showing countdown | pot | buy button
+- Condensed step text maintaining technical credibility
+- Step headers all caps: PURCHASE / HOLD & WAIT / RECEIVE YOUR FORTUNE
+- Step 2 rephrased: "When timer expires a snapshot is taken..."
+- Removed "on-chain" and volume description from pot
+- Single shared timer state managed in App component
+- Removed unused react-spring and StepNumber component
+
 **v4 - Responsive Design System & Advanced Animations:**
 - Implemented simplified responsive system (base → md → xl breakpoints)
 - 5 core font sizes for visual consistency
-- GSAP scroll-triggered stagger animations for steps
 - GSAP number counter for countdown digits
-- react-spring physics interactions for step numbers
 - Responsive spacing system throughout
-- Game section layout reorganized (timer-first, horizontal)
 - Changed step 3 from "Claim" to "Receive Your Fortune"
 - All cards use subtle `.mascot-frame` styling
 
@@ -305,10 +332,10 @@
 │   ├── heyyi.png           # Female prosperity mascot
 │   └── cz.png              # Male fortune mascot
 ├── src/
-│   ├── App.tsx             # Main component (~465 lines)
-│   │                       # - Marquee, CountdownTimer, SocialButton, StepNumber components
+│   ├── App.tsx             # Main component (~470 lines)
+│   │                       # - Marquee, CountdownTimer, CompactStepper, StickyMiniBar, SocialButton
 │   │                       # - Hero section (3-col on tablet+)
-│   │                       # - Game section (timer-first, single column)
+│   │                       # - Game section (2-col on desktop: countdown | stepper)
 │   ├── main.tsx            # React entry point
 │   ├── index.css           # Global styles + animations + utility classes
 │   └── vite-env.d.ts       # Vite types
