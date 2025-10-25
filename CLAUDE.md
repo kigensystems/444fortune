@@ -150,6 +150,20 @@
    - **Current Pot** section:
      - Label: "Current Pot"
      - Amount: "$12,847" (placeholder)
+   - **Wallet Odds Checker**:
+     - Section title: "Holding? Check your odds"
+     - Golden divider line above section
+     - Wallet address input field:
+       - Dark brown semi-transparent background
+       - Golden border (brightens on focus)
+       - Placeholder: "Enter wallet address"
+       - Cream gold text
+     - "Check" button with gold gradient and 3D press effect
+     - **Odds Display Panel** (appears after clicking Check):
+       - Shows "Your Entries", "Total Entries", and "Win Probability"
+       - Smooth expand animation
+       - Golden semi-transparent background
+       - Placeholder values: 247 entries / 3,891 total / 6.35% probability
    - Wrapped in `.mascot-frame` glass card
    - GSAP number counter animation on digit changes
    - Pulse animation when < 10 seconds remaining
@@ -167,7 +181,7 @@
       - When timer expires a snapshot is taken: all holders, balances, and transaction times
 
    3. **RECEIVE YOUR FORTUNE**
-      - 50% of volume auto-distributed to 5 winners. Odds weighted by hold time and amount
+      - 50% of all generated volume auto-distributed to 5 winners. Odds weighted by hold time and amount
 
    **Fortune Formula** (fine print at bottom of stepper):
    - Entries = Minutes held × % of supply. Example: 1% for 15min = 15 entries, 2% for 20min = 40 entries
@@ -199,6 +213,9 @@
 - Displays large countdown (MM:SS format)
 - Progress bar animating 0-100% over 20 minutes
 - Current Pot display ($12,847 placeholder)
+- Wallet odds checker with input field and "Check" button
+- Odds display panel showing entries, total entries, and win probability
+- State management for wallet address and odds visibility
 - GSAP animations for rolling digit transitions
 - Pulse animation at < 10 seconds
 - Wrapped in `.mascot-frame` glass card
@@ -264,14 +281,24 @@
 
 ### ✅ Completed Features
 
-**v5 - Two-Column Game Section + Sticky Mini-Bar:**
+**v5 - Two-Column Game Section + Sticky Mini-Bar + Wallet Odds Checker:**
 - Two-column layout for game section (countdown | stepper) on desktop
 - Countdown card with progress bar and current pot display
+- **Wallet odds checker feature**:
+  - "Holding? Check your odds" section title
+  - Wallet address input field with focus states
+  - "Check" button with 3D press effect
+  - Expandable odds display panel showing:
+    - Your Entries (247 placeholder)
+    - Total Entries (3,891 placeholder)
+    - Win Probability (6.35% placeholder)
+  - Smooth animations with Framer Motion
 - Compact stepper with circular numbered badges
 - Sticky mini-bar appears at 800px scroll showing countdown | pot | buy button
 - Condensed step text maintaining technical credibility
 - Step headers all caps: PURCHASE / HOLD & WAIT / RECEIVE YOUR FORTUNE
 - Step 2 rephrased: "When timer expires a snapshot is taken..."
+- Step 3 updated: "50% of all generated volume auto-distributed to 5 winners"
 - Removed "on-chain" and volume description from pot
 - Single shared timer state managed in App component
 - Removed unused react-spring and StepNumber component
@@ -332,10 +359,10 @@
 │   ├── heyyi.png           # Female prosperity mascot
 │   └── cz.png              # Male fortune mascot
 ├── src/
-│   ├── App.tsx             # Main component (~470 lines)
+│   ├── App.tsx             # Main component (~500 lines)
 │   │                       # - Marquee, CountdownTimer, CompactStepper, StickyMiniBar, SocialButton
 │   │                       # - Hero section (3-col on tablet+)
-│   │                       # - Game section (2-col on desktop: countdown | stepper)
+│   │                       # - Game section (2-col on desktop: countdown with odds checker | stepper)
 │   ├── main.tsx            # React entry point
 │   ├── index.css           # Global styles + animations + utility classes
 │   └── vite-env.d.ts       # Vite types

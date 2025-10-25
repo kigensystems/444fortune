@@ -28,6 +28,8 @@ function Marquee({ text }: { text: string }) {
 function CountdownTimer({ timeLeft }: { timeLeft: number }) {
   const minutesRef = useRef<HTMLSpanElement>(null)
   const secondsRef = useRef<HTMLSpanElement>(null)
+  const [walletAddress, setWalletAddress] = useState('')
+  const [showOdds, setShowOdds] = useState(false)
 
   const minutes = Math.floor(timeLeft / 60)
   const seconds = timeLeft % 60
@@ -50,6 +52,13 @@ function CountdownTimer({ timeLeft }: { timeLeft: number }) {
       )
     }
   }, [minutes, seconds])
+
+  const handleCheckOdds = () => {
+    if (walletAddress.trim()) {
+      setShowOdds(true)
+      // Placeholder: In production, this would query the blockchain
+    }
+  }
 
   return (
     <motion.div
@@ -95,7 +104,7 @@ function CountdownTimer({ timeLeft }: { timeLeft: number }) {
       </div>
 
       {/* Current Pot */}
-      <div className="text-center">
+      <div className="text-center mb-8">
         <p className="text-lg md:text-xl mb-2" style={{ color: '#FFE5B4', opacity: 0.8 }}>
           Current Pot
         </p>
@@ -105,6 +114,85 @@ function CountdownTimer({ timeLeft }: { timeLeft: number }) {
         }}>
           $12,847
         </p>
+      </div>
+
+      {/* Wallet Input Section */}
+      <div className="border-t pt-6" style={{ borderColor: 'rgba(212, 175, 55, 0.3)' }}>
+        <p className="text-base md:text-lg mb-3 text-center font-bold" style={{ color: '#FFE5B4' }}>
+          Holding? Check your odds
+        </p>
+
+        <div className="flex gap-2 mb-4">
+          <input
+            type="text"
+            placeholder="Enter wallet address"
+            value={walletAddress}
+            onChange={(e) => setWalletAddress(e.target.value)}
+            className="flex-1 px-3 py-2 md:px-4 md:py-3 rounded-lg text-sm md:text-base font-medium"
+            style={{
+              background: 'rgba(139, 69, 19, 0.2)',
+              border: '2px solid rgba(212, 175, 55, 0.4)',
+              color: '#F4E5C3',
+              outline: 'none'
+            }}
+            onFocus={(e) => e.target.style.borderColor = 'rgba(212, 175, 55, 0.7)'}
+            onBlur={(e) => e.target.style.borderColor = 'rgba(212, 175, 55, 0.4)'}
+          />
+          <motion.button
+            onClick={handleCheckOdds}
+            className="px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm md:text-base font-black"
+            style={{
+              background: 'linear-gradient(135deg, #FFE5B4 0%, #D4AF37 100%)',
+              color: '#8B0000',
+              boxShadow: '0 4px 0 #B8960B'
+            }}
+            whileHover={{ y: 2, boxShadow: '0 2px 0 #B8960B' }}
+            whileTap={{ y: 4, boxShadow: '0 0px 0 #B8960B' }}
+          >
+            Check
+          </motion.button>
+        </div>
+
+        {showOdds && walletAddress && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            transition={{ duration: 0.3 }}
+            className="p-4 rounded-lg"
+            style={{
+              background: 'rgba(212, 175, 55, 0.15)',
+              border: '1px solid rgba(212, 175, 55, 0.3)'
+            }}
+          >
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm md:text-base" style={{ color: '#FFE5B4', opacity: 0.8 }}>
+                Your Entries:
+              </span>
+              <span className="text-lg md:text-xl font-black" style={{ color: '#F4E5C3' }}>
+                247
+              </span>
+            </div>
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-sm md:text-base" style={{ color: '#FFE5B4', opacity: 0.8 }}>
+                Total Entries:
+              </span>
+              <span className="text-lg md:text-xl font-black" style={{ color: '#F4E5C3' }}>
+                3,891
+              </span>
+            </div>
+            <div className="flex justify-between items-center pt-2 border-t" style={{ borderColor: 'rgba(212, 175, 55, 0.2)' }}>
+              <span className="text-sm md:text-base font-bold" style={{ color: '#FFE5B4' }}>
+                Win Probability:
+              </span>
+              <span className="text-xl md:text-2xl font-black" style={{
+                color: '#FFE5B4',
+                textShadow: '2px 2px 0 #C4A137, 3px 3px 6px rgba(0, 0, 0, 0.4)'
+              }}>
+                6.35%
+              </span>
+            </div>
+          </motion.div>
+        )}
       </div>
     </motion.div>
   )
@@ -179,7 +267,7 @@ function CompactStepper() {
               RECEIVE YOUR FORTUNE
             </h4>
             <p className="text-base md:text-lg" style={{ color: '#F4E5C3', opacity: 0.9, lineHeight: '1.7' }}>
-              50% of volume auto-distributed to 5 winners. Odds weighted by hold time and amount
+              50% of all generated volume auto-distributed to 5 winners. Odds weighted by hold time and amount
             </p>
           </div>
         </div>
