@@ -16,8 +16,8 @@
 - **Framer Motion 11.0.0** (animations)
 
 ### Animation Libraries
-- **GSAP** (GreenSock) - Professional timeline animations, scroll triggers (ready to integrate)
-- **react-spring** - Physics-based bouncy animations (ready to integrate)
+- **GSAP** (GreenSock) - Timeline animations, scroll triggers, stagger effects (INTEGRATED)
+- **react-spring** - Physics-based spring animations (INTEGRATED)
 - **react-icons** - Social media icon components (integrated)
 - **@lottiefiles/dotlottie-react** - Lottie animation player (integrated for countdown visual)
 
@@ -42,40 +42,54 @@
 '#8B4513' - Dark brown (text shadows, depth)
 ```
 
+### Responsive Design System
+
+**Philosophy:** Mobile-first with simplified Tailwind breakpoints
+- **3 strategic breakpoints**: base (mobile) → md: (768px, tablet) → xl: (1280px, desktop)
+- **5 core font sizes** to maintain visual consistency
+
+**Typography Scale (base → md → xl):**
+1. Hero "444": `text-7xl md:text-8xl xl:text-9xl`
+2. Section headings: `text-4xl md:text-5xl xl:text-6xl`
+3. Countdown/large elements: `text-6xl md:text-7xl xl:text-8xl`
+4. Body text: `text-lg md:text-xl`
+5. Small print: `text-sm md:text-base`
+
+**Spacing System:**
+- Section padding: `pt-16 md:pt-24 xl:pt-32` / `pb-20 md:pb-32 xl:pb-40`
+- Card padding: `p-6 md:p-8 xl:p-10`
+- Gaps: `gap-6 md:gap-8 xl:gap-10`
+- Margins: `mb-8 md:mb-12 xl:mb-16` (varies by context)
+
+**Layout Breakpoints:**
+- Hero grid: `grid-cols-1 md:grid-cols-3` (mobile stack → 3-column at tablet)
+- Countdown: `flex-col md:flex-row` (vertical stack → horizontal at tablet)
+- All major layouts transition at md: (768px)
+
 ### Typography
 
 **Display Font:**
 - **Poppins** (Google Fonts) - Modern bold sans-serif
-- Used for: "444 FORTUNES" headline, major numbers, all text
+- Used for: All text throughout the site
 - Class: `font-casino` and `font-sans` (both configured)
 - Weights: 400, 500, 600, 700, 800, 900
 
 **Text Effects (Simplified 3D - No Glow):**
-- `.fortune-text` - Clean 3D depth for "FORTUNES"
-  - Cream fill (#F4E5C3), layered gold shadows, dark shadow for depth
-- `.fortune-number` - Clean 3D depth for "444"
-  - Cream fill (#F4E5C3), layered gold shadows, dark shadow for depth
+- `.fortune-text` - Clean 3D depth for "FORTUNES" (cream fill, gold shadows)
+- `.fortune-number` - Clean 3D depth for "444" (cream fill, gold shadows)
 - Both use 2-layer shadow progression (no glow effects)
 
-**Typography Scale:**
-- Hero number "444": `text-8xl md:text-9xl`
-- Hero headline: `text-6xl md:text-7xl`
-- Subtitle words: `text-xl md:text-2xl`
-- Section titles: `text-5xl md:text-6xl`
-- Body text: `text-lg`
-- Always use Tailwind scale values (no arbitrary sizes)
-
 ### Animation Philosophy
-- **Continuous motion** - Slow scrolling marquees, floating particles
+- **Continuous motion** - Slow scrolling marquees
 - **GPU-accelerated** - Transform and opacity only for 60fps
-- **Scroll-triggered reveals** - Intersection Observer for feature cards
+- **GSAP scroll-triggered reveals** - Stagger animations for steps
+- **react-spring physics** - Bouncy hover effects on step numbers
 - **Hover microinteractions** - Lift effects on mascots, 3D press on buttons
 - **Luxurious feel** - Slow, deliberate animations (40s marquee)
 
 ### Custom Animations (index.css)
-- `particle-float` (4s) - Upward floating golden sparkles (available)
+- `particle-float` (4s) - Upward floating golden sparkles (available, not actively used)
 - `marquee-slow` (40s) - Slow luxurious banner scroll (actively used)
-- Removed unused animations: `float`, `shimmer`, `glow-pulse`, `spin-slow`, `marquee` (20s version)
 
 ---
 
@@ -90,12 +104,12 @@
    - Message: "✦ 444 FORTUNES ✦ PROSPERITY ✦ ABUNDANCE ✦ GOOD LUCK ✦"
    - Loop-based generation (6 repetitions, no hardcoded duplicates)
 
-2. **Hero Section** (3-Column Layout)
+2. **Hero Section** (3-Column Layout on Tablet+)
    - **Background**: Chinese illustrated background (444background.jpg) with 25% black overlay
-   - **Layout**: Mascot | Content | Mascot
+   - **Layout**: Mascot | Content | Mascot (stacks on mobile, 3-col on md:)
    - **LEFT**: Heyyi Mascot
      - Female prosperity goddess in glass-morphism frame
-     - Portrait orientation (256-320px wide)
+     - Responsive sizing: w-64 md:w-72 xl:w-80
    - **CENTER**: Content area
      - "444" number with clean 3D effect
      - "FORTUNES" headline matching style
@@ -105,7 +119,7 @@
      - Primary CTA: "BUY $FORTUNE" (antique gold gradient, scrolls to game section)
    - **RIGHT**: CZ Mascot
      - Male fortune bringer in glass-morphism frame
-     - Portrait orientation (256-320px wide)
+     - Responsive sizing: w-64 md:w-72 xl:w-80
      - Image positioned 6% left (44% horizontal position)
 
    **Mascot Containers:**
@@ -119,34 +133,46 @@
    - Section divider between hero and game section
    - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
 
-4. **Game Section** (Two-Column Layout on Desktop)
-   - **Background**: Clean dark gradient (red-900 → red-950 → black)
+4. **Game Section** (Single Column, Timer-First Layout)
+   - **Background**: Illustrated background (gamebackground.jpg) with 25% black overlay
    - **Title**: "WILL YOU BE THE MOST FORTUNATE?"
-   - **Desktop Layout (≥lg)**: Side-by-side columns
-     - **LEFT**: How It Works (3 numbered steps + formula)
-     - **RIGHT**: Countdown Timer (sticky positioned, stays visible while scrolling)
-   - **Mobile Layout**: Stacked vertically
+   - **Layout Order**:
+     1. Countdown Timer (horizontal layout)
+     2. "How It Works" heading
+     3. Three step cards (single column, centered, max-w-5xl)
+
+   **Countdown Timer** (Horizontal 3-Part Layout):
+   - Switches from vertical (mobile) to horizontal (md:)
+   - **Left**: "NEXT FORTUNE DRAW" label + dynamic message
+   - **Center**: Large countdown (MM:SS format, cream gold color)
+   - **Right**: Lottie coin animation
+   - Wrapped in subtle `.mascot-frame` glass card
+   - GSAP number counter animation on digit changes
+   - Pulse animation when < 10 seconds remaining
 
    **How It Works Steps:**
-   1. Purchase $FORTUNE
+   Each step wrapped in `.mascot-frame` glass card with GSAP stagger reveal:
+
+   1. **Purchase $FORTUNE**
       - Your wallet, amount purchased and timestamp of tx will be added to the draw
-   2. HOLD & WAIT
+
+   2. **HOLD & WAIT**
       - After 20 minutes a snapshot is taken of current holders, amount of tokens, and tx time
-   3. Claim Your Fortune
-      - 50% of all volume distributed evenly to 5 holders
+
+   3. **Receive Your Fortune**
+      - 50% of all token volume automatically distributed to 5 holders
       - Odds greatly increased by hold time and amount held
 
-   **Fortune Formula Disclaimer** (italic text):
+   **Step Numbers:**
+   - react-spring physics-based hover effects
+   - Bouncy scale + lift on interaction
+   - Responsive sizing: `text-5xl md:text-6xl xl:text-7xl`
+
+   **Fortune Formula Disclaimer** (fine print):
    - Your entries = Minutes held × % of supply owned
    - Five winners drawn randomly from the pool
    - Example calculations showing entry multipliers
-
-   **CountdownTimer Component:**
-   - "NEXT FORTUNE DRAW" subtitle
-   - 20-minute countdown (MM:SS format, cream gold color)
-   - Lottie coin animation (max-w-lg size)
-   - Dynamic message: "Hold strong, prosperity approaches" or "Fortune favors the ready..."
-   - Pulse animation when < 10 seconds remaining
+   - Minimized styling: `text-sm md:text-base`, opacity 0.6
 
 5. **Bottom Marquee Banner**
    - Message: "✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦"
@@ -162,10 +188,17 @@
 
 **CountdownTimer**
 - 20-minute auto-resetting timer
+- Horizontal 3-part layout (label | countdown | lottie)
+- GSAP animations for rolling digit transitions
 - Lottie animation from lottie.host
-- Cream gold countdown text with 3D shadow
 - Conditional message based on time remaining
 - Pulse animation at < 10 seconds
+
+**StepNumber**
+- react-spring physics-based component
+- Bouncy hover effect with scale + translateY
+- Config: tension 300, friction 10
+- Used for numbered steps (1, 2, 3)
 
 **SocialButton**
 - Icon component from react-icons
@@ -179,16 +212,15 @@
 ## Background & Visual Effects
 
 ### Background Strategy
-**Hero Section Only:**
+**Hero Section:**
 - Custom illustrated background image: `444background.jpg`
 - Features: golden Chinese clouds, hanging lanterns, scattered coins, flowers
-- Illustrated/cartoon style matching overall aesthetic
 - 25% black overlay to reduce visual noise
-- Applied only to hero section (not site-wide)
 
-**Rest of Site:**
-- Clean dark gradient: `bg-gradient-to-b from-red-900 via-red-950 to-black`
-- No background image to keep focus on game mechanics
+**Game Section:**
+- Illustrated background image: `gamebackground.jpg`
+- Features: red background with golden swirls and stars
+- 25% black overlay for consistency with hero
 
 ### CSS Utility Classes (index.css)
 **Text Effects:**
@@ -201,48 +233,36 @@
 - `.marquee-text` - Embossed marquee text
 - `.social-button-3d` - Social button gradient with chunky shadow
 - `.cta-button-3d` - CTA button with deep 3D press effect
-- `.glass-card-gold` - Enhanced glass morphism cards (stronger borders, glow, inset highlights)
-- `.mascot-frame` - Glass morphism mascot containers
+- `.glass-card-gold` - Enhanced glass morphism cards (stronger borders, glow, inset highlights) - NOT CURRENTLY USED
+- `.mascot-frame` - Subtle glass morphism (used for mascots, countdown, and step cards)
+  - Very subtle brown tint (15% opacity)
+  - Thin semi-transparent golden borders (2px)
+  - Inset highlights for beveled edge
+  - Elegant and understated
 
 ---
 
-## Development Rules
+## Current State
 
-### Critical Workflows
-1. **Build command**: `npm run build` (TypeScript check + production build)
-2. **Preview**: `npm run preview` at `localhost:5173`
-3. **Always verify build** before considering work complete
+### ✅ Completed Features
 
-### Code Standards
-- **Delete replaced code** - Zero comments, no old versions
-- **Tailwind scale only** - No arbitrary values
-- **Type safety** - Proper TypeScript refs and types
-- **Semantic HTML** - Meaningful element choices
-- **Accessibility** - aria-labels on icon buttons, semantic markup
-
-### Animation Guidelines
-- Use Framer Motion for complex interactions
-- CSS keyframes for continuous loops
-- Always include hover states on interactive elements
-- Test animations at 60fps
-- GPU-accelerated properties only (transform, opacity)
-
----
-
-## Current State & Pending Work
-
-### ✅ Completed
+**v4 - Responsive Design System & Advanced Animations:**
+- Implemented simplified responsive system (base → md → xl breakpoints)
+- 5 core font sizes for visual consistency
+- GSAP scroll-triggered stagger animations for steps
+- GSAP number counter for countdown digits
+- react-spring physics interactions for step numbers
+- Responsive spacing system throughout
+- Game section layout reorganized (timer-first, horizontal)
+- Changed step 3 from "Claim" to "Receive Your Fortune"
+- All cards use subtle `.mascot-frame` styling
 
 **v3 - Game Mechanics & Layout Improvements:**
 - Replaced MoneyBagGrowth component with Lottie coin animation
-- Two-column desktop layout (steps left, countdown right with sticky positioning)
 - Comprehensive game mechanics documentation (3 clear steps)
 - Fortune formula with ticket-based entry system (Minutes × % Supply)
-- Background limited to hero section only (25% overlay)
-- Clean dark gradient for game section
-- Removed decorative footer elements
+- Added gamebackground.jpg to game section with 25% overlay
 - Middle marquee banner as section divider
-- Code refactoring: ~163 lines reduced, cleaner utilities
 
 **v2 - Elegant Gold Update:**
 - Replaced bright colors with sophisticated gold + cream palette
@@ -257,12 +277,12 @@
 
 **Performance:**
 - Optimized mascot images (5.5MB → 1.4-2.5MB at 1600px)
-- Responsive breakpoints: mobile (256px) → XL (320px)
 - Removed unused CSS animations
 - Loop-based Marquee component (no hardcoded repetitions)
+- Responsive breakpoints optimized for mobile-first
 
 **Assets:**
-- Illustrated background (444background.jpg, 2.4MB) - hero section only
+- Illustrated backgrounds (444background.jpg, gamebackground.jpg)
 - Optimized mascots (heyyi.png 2.5MB, cz.png 1.4MB at 1600px)
 - Lottie animation hosted on lottie.host
 
@@ -273,52 +293,6 @@
 - Winner history display
 - Blockchain transaction verification
 
-### 🚀 Advanced Animation Ideas (Dependencies Installed)
-GSAP and react-spring are installed but not yet integrated. Potential uses:
-
-**GSAP:**
-- Number counter animation (0 → 444 on load)
-- Stagger animations for social buttons
-- Advanced scroll triggers
-- Timeline-based entrance effects
-
-**react-spring:**
-- Physics-based button hover bounces
-- Spring animations on card interactions
-- Mouse-follow particle effects
-
-**Additional effects:**
-- Sparkle burst on button click
-- More particle variety
-- Texture overlays
-
----
-
-## Design Inspirations
-
-**Memecoin Landing Pages:**
-- Split hero layouts with large mascot characters
-- Marquee ticker text at top/bottom
-- Comic book style text with 3D depth
-- Social icon button rows
-- Story/feature card sections with illustrations
-- Energetic, playful aesthetic
-
-**"88 Fortunes" Slot Machine:**
-- Multi-layered text effects for 3D depth
-- Chinese prosperity goddess imagery
-- Gold ingot stacks and coins
-- Elegant gold color harmony
-- Celebration of wealth and luck
-- Luxurious casino feel
-
-**V2 Design Evolution:**
-- Moved away from "ketchup and mustard" bright colors
-- Adopted sophisticated gold + cream palette
-- Clean 3D effects without glow
-- Glass morphism elements
-- Slower, more deliberate animations
-
 ---
 
 ## File Structure
@@ -326,25 +300,56 @@ GSAP and react-spring are installed but not yet integrated. Potential uses:
 ```
 /444 Fortune/
 ├── public/
-│   ├── 444background.jpg # Illustrated background (hero section only)
-│   ├── heyyi.png         # Female prosperity mascot
-│   └── cz.png            # Male fortune mascot
+│   ├── 444background.jpg    # Illustrated background (hero section)
+│   ├── gamebackground.jpg   # Illustrated background (game section)
+│   ├── heyyi.png           # Female prosperity mascot
+│   └── cz.png              # Male fortune mascot
 ├── src/
-│   ├── App.tsx           # Main component (~400 lines)
-│   │                     # - Marquee, CountdownTimer, SocialButton components
-│   │                     # - Hero section, Game section with 2-col layout
-│   ├── main.tsx          # React entry point
-│   ├── index.css         # Global styles + animations + utility classes
-│   │                     # - Reduced unused animations
-│   │                     # - Added reusable utility classes
-│   └── vite-env.d.ts     # Vite types
-├── dist/                 # Build output (gitignored)
-├── index.html            # HTML template (includes Poppins font)
-├── tailwind.config.js    # Updated color palette (actual design tokens)
-├── vite.config.ts        # Build config
-├── package.json          # Dependencies (gsap, react-spring, react-icons, @lottiefiles/dotlottie-react)
-└── CLAUDE.md             # This file - project documentation
+│   ├── App.tsx             # Main component (~465 lines)
+│   │                       # - Marquee, CountdownTimer, SocialButton, StepNumber components
+│   │                       # - Hero section (3-col on tablet+)
+│   │                       # - Game section (timer-first, single column)
+│   ├── main.tsx            # React entry point
+│   ├── index.css           # Global styles + animations + utility classes
+│   └── vite-env.d.ts       # Vite types
+├── dist/                   # Build output (gitignored)
+├── index.html              # HTML template (includes Poppins font)
+├── tailwind.config.js      # Color palette and design tokens
+├── vite.config.ts          # Build config
+├── package.json            # Dependencies
+└── CLAUDE.md               # This file - project documentation
 ```
+
+---
+
+## Development Rules
+
+### Critical Workflows
+1. **Build command**: `npm run build` (TypeScript check + production build)
+2. **Preview**: `npm run preview` at `localhost:5173`
+3. **Always verify build** before considering work complete
+
+### Code Standards
+- **Delete replaced code** - Zero comments, no old versions
+- **Tailwind scale only** - No arbitrary values (except rare cases)
+- **Type safety** - Proper TypeScript refs and types
+- **Semantic HTML** - Meaningful element choices
+- **Accessibility** - aria-labels on icon buttons, semantic markup
+
+### Responsive Design Standards
+- **Mobile-first** - Start with base styles, add md: and xl: as needed
+- **3 breakpoints max** - base, md: (768px), xl: (1280px)
+- **5 core font sizes** - Maintain visual hierarchy
+- **Consistent spacing** - Use the defined spacing scale
+
+### Animation Guidelines
+- Use GSAP for scroll-triggered reveals and timeline-based animations
+- Use react-spring for physics-based interactions
+- Use Framer Motion for simple component animations
+- CSS keyframes for continuous loops only
+- Always include hover states on interactive elements
+- Test animations at 60fps
+- GPU-accelerated properties only (transform, opacity)
 
 ---
 
@@ -352,11 +357,11 @@ GSAP and react-spring are installed but not yet integrated. Potential uses:
 
 Before marking any task complete:
 - [ ] Build succeeds (`npm run build`)
-- [ ] Tested at mobile (375px) and desktop (1440px)
+- [ ] Tested at mobile (375px), tablet (768px), and desktop (1280px+)
 - [ ] All animations smooth at 60fps
 - [ ] Hover states working on all interactive elements
 - [ ] Spacing consistent with design system
-- [ ] No arbitrary Tailwind values
+- [ ] Responsive breakpoints working correctly
 - [ ] TypeScript has no errors
 - [ ] No console errors/warnings
 - [ ] Social links populated (currently placeholder "#")
@@ -368,11 +373,12 @@ Before marking any task complete:
 
 - This is a **single-page application** (no routing needed)
 - **Vision is evolving** - building iteratively, requirements will change
-- Design philosophy: Elegant gold aesthetic with luxurious feel, clean game section without distractions
+- Design philosophy: Elegant gold aesthetic with luxurious feel and sophisticated motion design
 - Social media links currently point to "#" - update when available
 - CZ mascot positioned 6% left (44% horizontal) to account for wider image dimensions
-- Background strategy: Hero has illustrated background, game section uses clean gradient
+- Both hero and game sections have illustrated backgrounds with 25% overlay
 - Game mechanics use simple ticket formula: Minutes held × % supply owned = entries
+- Responsive system follows modern mobile-first best practices
 
 ---
 
