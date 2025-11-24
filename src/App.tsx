@@ -3,369 +3,46 @@ import { useEffect, useRef, useState } from 'react'
 import { FaTwitter, FaTelegramPlane, FaDiscord, FaGlobe } from 'react-icons/fa'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useTokenStream } from './hooks/useTokenStream'
+import { Marquee } from './components/Marquee'
+import { CountdownTimer } from './components/CountdownTimer'
+import { CompactStepper } from './components/CompactStepper'
+import { StickyMiniBar } from './components/StickyMiniBar'
+import { SocialButton } from './components/SocialButton'
+import { BuyFeed } from './components/BuyFeed'
 
 gsap.registerPlugin(ScrollTrigger)
-
-function Marquee({ text }: { text: string }) {
-  const repetitions = Array.from({ length: 6 }, (_, i) => i)
-
-  return (
-    <div className="overflow-hidden whitespace-nowrap py-5 bg-marquee-gold">
-      <div className="inline-block animate-marquee-slow">
-        {repetitions.map(i => (
-          <span key={`a-${i}`} className="marquee-text">{text}</span>
-        ))}
-      </div>
-      <div className="inline-block animate-marquee-slow">
-        {repetitions.map(i => (
-          <span key={`b-${i}`} className="marquee-text">{text}</span>
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function CountdownTimer({ timeLeft }: { timeLeft: number }) {
-  const minutesRef = useRef<HTMLSpanElement>(null)
-  const secondsRef = useRef<HTMLSpanElement>(null)
-  const [walletAddress, setWalletAddress] = useState('')
-  const [showOdds, setShowOdds] = useState(false)
-
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
-  const progress = ((20 * 60 - timeLeft) / (20 * 60)) * 100
-
-  // GSAP number counter animation
-  useEffect(() => {
-    if (minutesRef.current) {
-      gsap.fromTo(
-        minutesRef.current,
-        { opacity: 0.7, y: -5 },
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      )
-    }
-    if (secondsRef.current) {
-      gsap.fromTo(
-        secondsRef.current,
-        { opacity: 0.7, y: -5 },
-        { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out' }
-      )
-    }
-  }, [minutes, seconds])
-
-  const handleCheckOdds = () => {
-    if (walletAddress.trim()) {
-      setShowOdds(true)
-      // Placeholder: In production, this would query the blockchain
-    }
-  }
-
-  return (
-    <motion.div
-      className="mascot-frame rounded-3xl p-6 md:p-8 xl:p-10"
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6 }}
-    >
-      <h2 className="text-3xl md:text-4xl xl:text-5xl font-black mb-6 text-center" style={{
-        color: '#FFE5B4',
-        letterSpacing: '2px'
-      }}>
-        TIME REMAINING
-      </h2>
-
-      <motion.div
-        className="text-6xl md:text-7xl xl:text-8xl font-black text-center mb-8"
-        style={{
-          color: '#F4E5C3',
-          textShadow: '3px 3px 0 #C4A137, 5px 5px 16px rgba(0, 0, 0, 0.5)'
-        }}
-        animate={{ scale: timeLeft <= 10 ? [1, 1.05, 1] : 1 }}
-        transition={{ duration: 0.5, repeat: timeLeft <= 10 ? Infinity : 0 }}
-      >
-        <span ref={minutesRef}>{String(minutes).padStart(2, '0')}</span>:<span ref={secondsRef}>{String(seconds).padStart(2, '0')}</span>
-      </motion.div>
-
-      {/* Progress Bar */}
-      <div className="mb-6">
-        <div className="w-full h-4 rounded-full" style={{ background: 'rgba(139, 69, 19, 0.3)' }}>
-          <motion.div
-            className="h-full rounded-full"
-            style={{
-              background: 'linear-gradient(90deg, #D4AF37 0%, #FFE5B4 100%)',
-              width: `${progress}%`
-            }}
-            initial={{ width: 0 }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 1 }}
-          />
-        </div>
-      </div>
-
-      {/* Current Pot */}
-      <div className="text-center mb-8">
-        <p className="text-lg md:text-xl mb-2" style={{ color: '#FFE5B4', opacity: 0.8 }}>
-          Current Pot
-        </p>
-        <p className="text-3xl md:text-4xl xl:text-5xl font-black" style={{
-          color: '#F4E5C3',
-          textShadow: '2px 2px 0 #C4A137, 3px 3px 8px rgba(0, 0, 0, 0.4)'
-        }}>
-          $12,847
-        </p>
-      </div>
-
-      {/* Wallet Input Section */}
-      <div className="border-t pt-6" style={{ borderColor: 'rgba(212, 175, 55, 0.3)' }}>
-        <p className="text-base md:text-lg mb-3 text-center font-bold" style={{ color: '#FFE5B4' }}>
-          Holding? Check your odds
-        </p>
-
-        <div className="flex gap-2 mb-4">
-          <input
-            type="text"
-            placeholder="Enter wallet address"
-            value={walletAddress}
-            onChange={(e) => setWalletAddress(e.target.value)}
-            className="flex-1 px-3 py-2 md:px-4 md:py-3 rounded-lg text-sm md:text-base font-medium"
-            style={{
-              background: 'rgba(139, 69, 19, 0.2)',
-              border: '2px solid rgba(212, 175, 55, 0.4)',
-              color: '#F4E5C3',
-              outline: 'none'
-            }}
-            onFocus={(e) => e.target.style.borderColor = 'rgba(212, 175, 55, 0.7)'}
-            onBlur={(e) => e.target.style.borderColor = 'rgba(212, 175, 55, 0.4)'}
-          />
-          <motion.button
-            onClick={handleCheckOdds}
-            className="px-4 md:px-6 py-2 md:py-3 rounded-lg text-sm md:text-base font-black"
-            style={{
-              background: 'linear-gradient(135deg, #FFE5B4 0%, #D4AF37 100%)',
-              color: '#8B0000',
-              boxShadow: '0 4px 0 #B8960B'
-            }}
-            whileHover={{ y: 2, boxShadow: '0 2px 0 #B8960B' }}
-            whileTap={{ y: 4, boxShadow: '0 0px 0 #B8960B' }}
-          >
-            Check
-          </motion.button>
-        </div>
-
-        {showOdds && walletAddress && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            transition={{ duration: 0.3 }}
-            className="p-4 rounded-lg"
-            style={{
-              background: 'rgba(212, 175, 55, 0.15)',
-              border: '1px solid rgba(212, 175, 55, 0.3)'
-            }}
-          >
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm md:text-base" style={{ color: '#FFE5B4', opacity: 0.8 }}>
-                Your Entries:
-              </span>
-              <span className="text-lg md:text-xl font-black" style={{ color: '#F4E5C3' }}>
-                247
-              </span>
-            </div>
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-sm md:text-base" style={{ color: '#FFE5B4', opacity: 0.8 }}>
-                Total Entries:
-              </span>
-              <span className="text-lg md:text-xl font-black" style={{ color: '#F4E5C3' }}>
-                3,891
-              </span>
-            </div>
-            <div className="flex justify-between items-center pt-2 border-t" style={{ borderColor: 'rgba(212, 175, 55, 0.2)' }}>
-              <span className="text-sm md:text-base font-bold" style={{ color: '#FFE5B4' }}>
-                Win Probability:
-              </span>
-              <span className="text-xl md:text-2xl font-black" style={{
-                color: '#FFE5B4',
-                textShadow: '2px 2px 0 #C4A137, 3px 3px 6px rgba(0, 0, 0, 0.4)'
-              }}>
-                6.35%
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </div>
-    </motion.div>
-  )
-}
-
-function CompactStepper() {
-  return (
-    <motion.div
-      className="mascot-frame rounded-3xl p-6 md:p-8 xl:p-10"
-      initial={{ opacity: 0, scale: 0.9 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-    >
-      <h3 className="text-3xl md:text-4xl xl:text-5xl font-black mb-8 text-center" style={{
-        color: '#FFE5B4',
-        letterSpacing: '1px'
-      }}>
-        How It Works
-      </h3>
-
-      <div className="space-y-6">
-        {/* Step 1 */}
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-black text-lg md:text-xl" style={{
-            background: 'linear-gradient(135deg, #FFE5B4 0%, #D4AF37 100%)',
-            color: '#8B0000',
-            boxShadow: '0 4px 0 #B8960B'
-          }}>
-            1
-          </div>
-          <div>
-            <h4 className="text-xl md:text-2xl font-black mb-2" style={{ color: '#FFE5B4' }}>
-              PURCHASE $FORTUNE
-            </h4>
-            <p className="text-base md:text-lg" style={{ color: '#F4E5C3', opacity: 0.9, lineHeight: '1.7' }}>
-              Wallet address, amount, and timestamp recorded
-            </p>
-          </div>
-        </div>
-
-        {/* Step 2 */}
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-black text-lg md:text-xl" style={{
-            background: 'linear-gradient(135deg, #FFE5B4 0%, #D4AF37 100%)',
-            color: '#8B0000',
-            boxShadow: '0 4px 0 #B8960B'
-          }}>
-            2
-          </div>
-          <div>
-            <h4 className="text-xl md:text-2xl font-black mb-2" style={{ color: '#FFE5B4' }}>
-              HOLD & WAIT
-            </h4>
-            <p className="text-base md:text-lg" style={{ color: '#F4E5C3', opacity: 0.9, lineHeight: '1.7' }}>
-              When timer expires a snapshot is taken: all holders, balances, and transaction times
-            </p>
-          </div>
-        </div>
-
-        {/* Step 3 */}
-        <div className="flex items-start gap-4">
-          <div className="flex-shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center font-black text-lg md:text-xl" style={{
-            background: 'linear-gradient(135deg, #FFE5B4 0%, #D4AF37 100%)',
-            color: '#8B0000',
-            boxShadow: '0 4px 0 #B8960B'
-          }}>
-            3
-          </div>
-          <div>
-            <h4 className="text-xl md:text-2xl font-black mb-2" style={{ color: '#FFE5B4' }}>
-              RECEIVE YOUR FORTUNE
-            </h4>
-            <p className="text-base md:text-lg" style={{ color: '#F4E5C3', opacity: 0.9, lineHeight: '1.7' }}>
-              50% of all generated volume auto-distributed to 5 winners. Odds weighted by hold time and amount
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <p className="mt-6 text-sm md:text-base text-center italic" style={{ color: '#F4E5C3', opacity: 0.5, lineHeight: '1.6' }}>
-        Entries = Minutes held × % of supply. Example: 1% for 15min = 15 entries, 2% for 20min = 40 entries
-      </p>
-    </motion.div>
-  )
-}
-
-function StickyMiniBar({ timeLeft }: { timeLeft: number }) {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > 800)
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  const minutes = Math.floor(timeLeft / 60)
-  const seconds = timeLeft % 60
-
-  return (
-    <motion.div
-      className="fixed top-0 left-0 right-0 z-50 bg-marquee-gold py-3 px-4"
-      initial={{ y: -100 }}
-      animate={{ y: isVisible ? 0 : -100 }}
-      transition={{ duration: 0.3 }}
-      style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)' }}
-    >
-      <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        <div className="flex items-center gap-4 md:gap-8">
-          <div className="text-lg md:text-xl font-black" style={{ color: '#8B0000' }}>
-            {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
-          </div>
-          <div className="hidden md:block text-lg font-bold" style={{ color: '#8B0000' }}>
-            Pot: $12,847
-          </div>
-        </div>
-        <motion.button
-          className="px-6 py-2 md:px-8 md:py-3 text-base md:text-lg font-black rounded-full"
-          style={{
-            background: 'linear-gradient(180deg, #8B0000 0%, #600000 100%)',
-            color: '#FFE5B4',
-            boxShadow: '0 4px 0 #400000, 0 6px 12px rgba(0, 0, 0, 0.3)'
-          }}
-          whileHover={{ y: 2, boxShadow: '0 2px 0 #400000, 0 4px 8px rgba(0, 0, 0, 0.3)' }}
-          whileTap={{ y: 4, boxShadow: '0 0px 0 #400000, 0 2px 4px rgba(0, 0, 0, 0.3)' }}
-        >
-          BUY $FORTUNE
-        </motion.button>
-      </div>
-    </motion.div>
-  )
-}
-
-function SocialButton({ icon: Icon, href, label }: { icon: any; href: string; label: string }) {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="w-16 h-16 rounded-2xl flex items-center justify-center text-2xl social-button-3d"
-      whileHover={{
-        y: 2,
-        boxShadow: '0 4px 0 #B8960B, 0 8px 12px rgba(0, 0, 0, 0.3)'
-      }}
-      whileTap={{
-        y: 4,
-        boxShadow: '0 2px 0 #B8960B, 0 4px 8px rgba(0, 0, 0, 0.3)'
-      }}
-      aria-label={label}
-    >
-      <Icon />
-    </motion.a>
-  )
-}
-
 
 function App() {
   const gameSectionRef = useRef<HTMLDivElement>(null)
   const [timeLeft, setTimeLeft] = useState(20 * 60)
+  const [isTimerRunning, setIsTimerRunning] = useState(false)
 
+  // Use custom hook for data logic
+  const { marketCap, fortunePool, buyEvents, topHolders, startSimulation } = useTokenStream()
+
+  // Timer Logic
   useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) return 20 * 60
-        return prev - 1
-      })
-    }, 1000)
+    let timer: NodeJS.Timeout
 
-    return () => clearInterval(timer)
-  }, [])
+    if (isTimerRunning) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) return 20 * 60
+          return prev - 1
+        })
+      }, 1000)
+    }
+
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [isTimerRunning])
+
+  const handleStartSimulation = () => {
+    setIsTimerRunning(true)
+    startSimulation(Date.now())
+  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-red-900 via-red-950 to-black">
@@ -531,19 +208,27 @@ function App() {
 
       <Marquee text="✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦" />
 
-      <StickyMiniBar timeLeft={timeLeft} />
+      <StickyMiniBar timeLeft={timeLeft} fortunePool={fortunePool} />
 
       <section ref={gameSectionRef} className="relative pt-16 md:pt-24 xl:pt-32 pb-20 md:pb-32 xl:pb-40 px-4 bg-game">
         <div className="absolute inset-0 bg-black opacity-25" />
-        <div className="max-w-7xl mx-auto relative z-10">
+        <div className="max-w-7xl mx-auto relative z-10 space-y-8 md:space-y-10 xl:space-y-12">
           {/* Two-column layout: Countdown | How It Works */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 xl:gap-12">
-            {/* Left Column - Countdown with Pot */}
-            <CountdownTimer timeLeft={timeLeft} />
+            {/* Left Column - Countdown with Fortune Pool */}
+            <CountdownTimer
+              timeLeft={timeLeft}
+              marketCap={marketCap}
+              fortunePool={fortunePool}
+              onStartSimulation={handleStartSimulation}
+            />
 
             {/* Right Column - Compact Stepper */}
             <CompactStepper />
           </div>
+
+          {/* Full-width Buy Feed */}
+          <BuyFeed buyEvents={buyEvents} topHolders={topHolders} />
         </div>
       </section>
 
