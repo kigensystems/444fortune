@@ -6,11 +6,11 @@ export class MockTokenStream {
 
     // Simulation State
     private startTime: number = 0
-    private marketCap: number = 4444
-    private fortunePool: number = 44
-    private tokenPrice: number = 0.000004444
+    private marketCap: number = 5500
+    private fortunePool: number = 55
+    private tokenPrice: number = 0.0000055
     private supply: number = 1_000_000_000
-    private activeTraders: Set<string> = new Set()
+    private activeTraders: string[] = []
 
     // RNG State
     private seed: number = 12345
@@ -53,13 +53,27 @@ export class MockTokenStream {
 
     private initializeHolders() {
         this.seed = 12345 // Reset seed for consistent holders
-        this.topHolders = this.walletAddresses.map(wallet => ({
-            wallet,
-            balance: Math.floor(this.random() * 10_000_000) + 500_000,
-            supplyPercent: 0,
-            firstBuyTxHash: this.generateTxHash(),
-            firstBuyTime: Date.now() - Math.floor(this.random() * 10000000)
-        }))
+
+        // Dev Wallet (First one) gets 3% supply (30,000,000)
+        // Others get random amounts < 1% to start
+        this.topHolders = this.walletAddresses.map((wallet, index) => {
+            let balance = 0
+            if (index === 0) {
+                // Dev Wallet
+                balance = 30_000_000 // 3% of 1B
+            } else {
+                // Random early buyers: 0.1% to 0.5%
+                balance = Math.floor(this.random() * 4_000_000) + 1_000_000
+            }
+
+            return {
+                wallet,
+                balance,
+                supplyPercent: 0,
+                firstBuyTxHash: this.generateTxHash(),
+                firstBuyTime: Date.now() - Math.floor(this.random() * 10000000)
+            }
+        })
         this.updateHolderPercentages()
         this.sortHolders()
     }
@@ -85,15 +99,19 @@ export class MockTokenStream {
         }, 500)
     }
 
+    getStartTime() {
+        return this.startTime
+    }
+
     start(startTime?: number) {
         console.log('[MockTokenStream] Starting simulation...', startTime)
 
         // Reset State
         this.startTime = startTime || Date.now()
         this.seed = this.startTime // Seed with start time for consistency across clients
-        this.marketCap = 4444
-        this.fortunePool = 44
-        this.tokenPrice = 0.000004444
+        this.marketCap = 5500
+        this.fortunePool = 55
+        this.tokenPrice = 0.0000055
         this.recentEvents = []
 
         // Fast forward if needed
@@ -142,7 +160,7 @@ export class MockTokenStream {
             lastTradeTimestamp: Date.now(),
             marketCap: this.marketCap,
             fortunePool: this.fortunePool,
-            activeTraderCount: this.activeTraders.size + 12,
+            activeTraderCount: this.activeTraders.length + 12,
             metrics: this.metrics,
             recentEvents: this.recentEvents,
             topHolders: this.topHolders
@@ -156,8 +174,10 @@ export class MockTokenStream {
         const elapsed = now - this.startTime
         const progress = Math.min(elapsed / (20 * 60 * 1000), 1) // 0 to 1 over 20 mins
 
-        // Target Market Cap Curve: 4444 -> 60000 (Quadratic)
-        const targetMC = 4444 + (55556 * Math.pow(progress, 2))
+        // Target Market Cap Curve: Faster growth
+        // Previous: 4444 + (55556 * Math.pow(progress, 2))
+        // New: Faster initial growth using lower exponent
+        const targetMC = 5500 + (80000 * Math.pow(progress, 1.3))
 
         // Determine if we need to buy to catch up to curve
         // Add some noise so it's not a perfect line
@@ -172,14 +192,14 @@ export class MockTokenStream {
         // Dynamic Buy Amounts based on % of Market Cap
         if (isBuy) {
             if (rand > 0.95) {
-                // Whale: 3-5% of MC
-                usdAmount = this.marketCap * (0.03 + (this.random() * 0.02))
+                // Whale: 0.5-1% of MC (Reduced from 3-5% to prevent supply > 100%)
+                usdAmount = this.marketCap * (0.005 + (this.random() * 0.005))
             } else if (rand > 0.7) {
-                // Medium: 0.5-1.5% of MC
-                usdAmount = this.marketCap * (0.005 + (this.random() * 0.01))
+                // Medium: 0.1-0.3% of MC
+                usdAmount = this.marketCap * (0.001 + (this.random() * 0.002))
             } else {
-                // Shrimp: 0.1-0.5% of MC
-                usdAmount = this.marketCap * (0.001 + (this.random() * 0.004))
+                // Shrimp: 0.01-0.05% of MC
+                usdAmount = this.marketCap * (0.0001 + (this.random() * 0.0004))
             }
         } else {
             // Sells are smaller to maintain growth
@@ -189,16 +209,41 @@ export class MockTokenStream {
         // Clamp min amount
         usdAmount = Math.max(usdAmount, 10)
 
-        const tokenAmount = usdAmount / this.tokenPrice
+        let tokenAmount = usdAmount / this.tokenPrice
+
+        // Fortune Pool gets 50% of all volume (Buy + Sell)
+        this.fortunePool += usdAmount * 0.5
 
         if (isBuy) {
             this.marketCap += usdAmount
-            this.fortunePool += usdAmount * 0.01
             this.tokenPrice = this.marketCap / this.supply
             this.metrics.buyVolume += usdAmount
 
             const holder = this.topHolders.find(h => h.wallet === wallet)
-            if (holder) holder.balance += tokenAmount
+
+            // Enforce 5% Cap (50,000,000 tokens)
+            if (holder) {
+                if (holder.balance + tokenAmount > 50_000_000) {
+                    // Cap the buy amount to exactly reach 50M or skip if already there
+                    const maxBuy = 50_000_000 - holder.balance
+                    if (maxBuy <= 0) {
+                        // Wallet is full, force a sell or skip
+                        // For simplicity, let's just skip this buy event and return early (effectively a failed tx or no-op)
+                        // But we need to be careful not to break the loop. 
+                        // Let's just reduce amount to 0 and continue (it will record a 0 event which is weird, so let's swap to sell)
+                        // Actually, let's just cap it.
+                        tokenAmount = 0
+                        usdAmount = 0
+                    } else {
+                        tokenAmount = maxBuy
+                        usdAmount = tokenAmount * this.tokenPrice
+                    }
+                }
+
+                if (tokenAmount > 0) {
+                    holder.balance += tokenAmount
+                }
+            }
         } else {
             this.marketCap -= usdAmount * 0.8 // Dampened impact
             this.tokenPrice = this.marketCap / this.supply
@@ -210,7 +255,18 @@ export class MockTokenStream {
 
         this.updateHolderPercentages()
         this.sortHolders()
-        this.activeTraders.add(wallet)
+
+        // Update active traders (cap at 100)
+        if (!this.activeTraders.includes(wallet)) {
+            this.activeTraders.unshift(wallet)
+            if (this.activeTraders.length > 100) {
+                this.activeTraders.pop()
+            }
+        } else {
+            // Move to top if already exists
+            this.activeTraders = this.activeTraders.filter(w => w !== wallet)
+            this.activeTraders.unshift(wallet)
+        }
 
         const event: TokenEvent = {
             id: Date.now().toString() + Math.floor(this.random() * 1000),

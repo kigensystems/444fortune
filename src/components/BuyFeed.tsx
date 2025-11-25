@@ -73,6 +73,7 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                         ) : (
                             buyEvents.map((event) => (
                                 <motion.a
+                                    layout
                                     key={event.id}
                                     href={`https://bscscan.com/tx/${event.txHash}`}
                                     target="_blank"
@@ -149,6 +150,7 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                         ) : (
                             topHolders.map((holder, index) => (
                                 <motion.div
+                                    layout
                                     key={holder.wallet}
                                     className="block rounded-xl p-4 transition-all duration-200"
                                     style={{

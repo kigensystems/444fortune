@@ -19,29 +19,44 @@ function App() {
   const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   // Use custom hook for data logic
-  const { marketCap, fortunePool, buyEvents, topHolders, startSimulation } = useTokenStream()
+  const { marketCap, fortunePool, buyEvents, topHolders, startSimulation, startTime } = useTokenStream()
 
   // Timer Logic
   useEffect(() => {
+    if (startTime) {
+      setIsTimerRunning(true)
+    }
+  }, [startTime])
+
+  useEffect(() => {
     let timer: NodeJS.Timeout
 
-    if (isTimerRunning) {
-      timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) return 20 * 60
-          return prev - 1
-        })
-      }, 1000)
+    if (isTimerRunning && startTime) {
+      // Immediate update
+      const updateTimer = () => {
+        const now = Date.now()
+        const elapsedSeconds = Math.floor((now - startTime) / 1000)
+        const remaining = Math.max(0, (20 * 60) - elapsedSeconds)
+        setTimeLeft(remaining)
+      }
+
+      updateTimer() // Run once immediately
+      timer = setInterval(updateTimer, 1000)
+    } else if (isTimerRunning && !startTime) {
+      // Fallback if manually started without server sync (shouldn't happen often)
+      // But for consistency, let's just wait for startTime
     }
 
     return () => {
       if (timer) clearInterval(timer)
     }
-  }, [isTimerRunning])
+  }, [isTimerRunning, startTime])
 
   const handleStartSimulation = () => {
+    // Optimistic start
+    const now = Date.now()
     setIsTimerRunning(true)
-    startSimulation(Date.now())
+    startSimulation(now)
   }
 
   return (

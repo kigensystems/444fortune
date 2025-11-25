@@ -12,6 +12,7 @@ interface UseTokenStreamResult {
     metrics: TokenMetrics | null
     snapshot: TokenStreamSnapshot | null
     recentEvents: TokenEvent[]
+    startTime: number | null
     startSimulation: (startTime?: number) => void
 }
 
@@ -25,6 +26,7 @@ export function useTokenStream(): UseTokenStreamResult {
     const [topHolders, setTopHolders] = useState<TopHolder[]>([])
     const [metrics, setMetrics] = useState<TokenMetrics | null>(null)
     const [recentEvents, setRecentEvents] = useState<TokenEvent[]>([])
+    const [startTime, setStartTime] = useState<number | null>(null)
 
     const streamRef = useRef<MockTokenStream | null>(null)
 
@@ -86,14 +88,15 @@ export function useTokenStream(): UseTokenStreamResult {
                 if (res.ok) {
                     const data = await res.json()
                     if (data.isRunning && data.startTime) {
-                        // Only start if not already started or if start time differs significantly
-                        // We can just call start() which handles idempotency or resets if needed
-                        // But MockTokenStream.start() resets state, so we should be careful.
-                        // Let's check if we need to sync.
-                        // Accessing private state is hard, but we can just call start(startTime)
-                        // The MockStream should handle "already running" logic or we just reset it.
-                        // For this demo, resetting to the correct server time is fine.
-                        stream.start(data.startTime)
+                        // Only start if not already started or if start time differs significantly (> 2s)
+                        const currentStartTime = stream.getStartTime()
+                        const diff = Math.abs(data.startTime - (currentStartTime || 0))
+
+                        if (!currentStartTime || diff > 2000) {
+                            console.log('[useTokenStream] Syncing simulation to', data.startTime)
+                            stream.start(data.startTime)
+                            setStartTime(data.startTime)
+                        }
                     }
                 }
             } catch (e) {
@@ -121,6 +124,7 @@ export function useTokenStream(): UseTokenStreamResult {
         metrics,
         snapshot,
         recentEvents,
+        startTime,
         startSimulation
     }
 }
