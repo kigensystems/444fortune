@@ -1,180 +1,131 @@
-# 444 Fortune - Four.meme Casino Game
+# 444 Fortune
 
-Casino-themed memecoin landing page with a simulated real-time token tracking experience and a 20-minute draw game mechanic.
+Casino-themed memecoin landing page with a simulated real-time token stream and 20-minute draw game.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![React](https://img.shields.io/badge/React-18.3.1-61dafb.svg)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4.5-3178c6.svg)
-![Netlify](https://img.shields.io/badge/Netlify-Functions-00C7B7.svg)
+## Tech Stack
 
----
+- **Frontend**: React 18 + TypeScript + Vite + Tailwind CSS
+- **Animation**: Framer Motion + GSAP
+- **Backend**: Netlify Functions + Blobs (global state sync)
 
-## 🎯 Project Overview
-
-**444 Fortune** is a full-stack application featuring:
-- 🎰 **Casino-themed UI** with Asian prosperity aesthetics
-- 📊 **Simulated Token Tracking**: Realistic mock data stream mimicking Four.meme token activity
-- 🔄 **Global Synchronization**: Serverless simulation state synced across all users via Netlify Functions
-- ⏱️ **20-minute countdown game** with entry-based odds system
-- 💰 **Live market cap and trading volume display** (Simulated)
-
-**Tech Stack:**
-- **Frontend**: React 18 + TypeScript + Vite + Tailwind + Framer Motion
-- **Animation**: GSAP + react-spring + Lottie
-- **Backend**: Netlify Functions V2 (Serverless)
-- **Persistence**: Netlify Blobs (for global simulation state)
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 20+
-- Netlify CLI (optional, for local function testing)
-
-### Installation
+## Quick Start
 
 ```bash
-# Install dependencies
 npm install
+npm run dev          # Frontend only (localhost:5173)
+npx netlify dev      # With serverless functions (localhost:8888)
 ```
 
-### Development
+## How It Works
 
-```bash
-# Run frontend only (Mock data works locally)
-npm run dev
-# Opens at http://localhost:5173
+### Simulation Engine
 
-# Run with Netlify Functions (for testing global sync)
-npx netlify dev
-# Opens at http://localhost:8888
-```
+The `MockTokenStream` generates realistic market data using a **deterministic RNG** seeded with the global start time. All users see identical events at the same timestamps.
 
-### Production Build
+**Growth Curve:**
+- Start: $5,500 market cap
+- Target: $65,000 after 20 minutes
+- Formula: `MC = 5500 + (59500 × progress^1.1)`
+- First $20k growth in ~7-8 minutes, remaining $45k over ~12-13 minutes
 
-```bash
-npm run build
-npm run preview
-```
+**Buy Sizing (% of market cap):**
+| Type | Size Range | Probability |
+|------|------------|-------------|
+| Whale | 2-4% | 5% |
+| Medium | 0.5-1.2% | 25% |
+| Shrimp | 0.1-0.4% | 70% |
 
----
+**Adaptive Catch-up:** Probabilities adjust dynamically based on deviation from target curve to ensure smooth tracking.
 
-## 🏗️ Architecture
+**Fortune Pool:** 30% of all transaction volume accumulates in the prize pool (~$18k at end).
 
-### Mock Data Stream
-The application uses a sophisticated client-side simulation (`src/services/MockTokenStream.ts`) to generate realistic market data:
-- **Deterministic Generation**: Seeded RNG ensures consistent data generation based on a start time.
-- **Quadratic Growth**: Simulates a token pump from $4k to $60k market cap over 20 minutes.
-- **Events**: Generates realistic Buy/Sell events, volume updates, and top holder changes.
+### Tokenomics
 
-### Global Synchronization
-To ensure all users see the *same* simulation state, we use **Netlify Functions** and **Blobs**:
+- **Total Supply**: 1 billion tokens
+- **Dev Wallet**: 3% (held by first wallet)
+- **Max Wallet**: 5% cap per address
 
-1.  **State Storage**: A Netlify Blob store named `"simulation"` holds the global `startTime`.
-2.  **API Endpoint** (`netlify/functions/simulation.mts`):
-    - `GET`: Returns the current `startTime` and running status.
-    - `POST`: Starts a new simulation (requires secret key) and updates the `startTime`.
-3.  **Client Sync**: The `useTokenStream` hook polls the API on mount. If a simulation is running globally, it syncs the local mock stream to the server's `startTime`.
+### Global Sync
 
----
+1. Admin triggers simulation by entering `FORTUNE444` in the wallet checker
+2. Netlify Function stores `startTime` in Blob storage
+3. All clients poll the API and sync to the same start time
+4. Deterministic RNG ensures identical state across all users
 
-## 🎨 Design System
+### Game Mechanics
 
-### Brand Colors
-**Palette - Elegant Gold + Cream:**
-- `#F4E5C3` - Cream/champagne gold (main titles, borders)
-- `#FFE5B4` - Peach/light gold (gradients, highlights)
-- `#D4AF37` - Antique gold (gradients, accents)
-- `#B8960B` - Dark gold (3D bases, shadows)
-- `#8B0000` - Dark red (text on gold backgrounds)
+**Entry Formula:** `Entries = Minutes Held × % of Supply`
 
-### Typography
-- **Poppins** (Google Fonts) - Modern bold sans-serif
-- Weights: 400-900
-- Clean 3D depth effects (no glow)
+Example: Hold 2% for 20 minutes = 40 entries
 
-### Animation Philosophy
-- **Continuous motion**: Slow scrolling marquees (40s cycle)
-- **GPU-accelerated**: Transform/opacity only for 60fps
-- **GSAP**: Scroll-triggered reveals and timeline animations
-- **react-spring**: Physics-based hover effects
+**Prize Distribution:** 50% of fortune pool split among 5 winners, weighted by entries.
 
----
-
-## 🧩 Component Architecture
-
-### Main Sections
-1.  **Hero Section**: 3-column layout (Mascot | Content | Mascot) with glass-morphism frames.
-2.  **Game Section**: 2-column layout (Countdown | Stepper).
-    - **Countdown Card**: Displays time, Market Cap, and Fortune Pool.
-    - **Compact Stepper**: "How It Works" guide.
-3.  **Marquees**: Top, Middle, and Bottom scrolling banners.
-4.  **Sticky Mini-Bar**: Appears on scroll, showing quick stats and CTA.
-
-### Key Components
-- `WalletChecker.tsx`: Input for "Check Your Odds". Contains the **secret trigger** ("FORTUNE444") to start the global simulation.
-- `BuyFeed.tsx`: Split view showing recent Transactions and Top Holders.
-- `CountdownTimer.tsx`: Visual timer with GSAP digit transitions.
-
----
-
-## 🎮 Game Mechanics
-
-### Entry System
-**Formula:** `Entries = Minutes Held × % of Supply`
-
-**Example:**
-- Hold 1% of supply for 15 minutes = 15 entries
-- Hold 2% of supply for 20 minutes = 40 entries
-
-### Simulation Flow
-1.  **Idle**: Timer at 20:00, Market Cap at initial seed.
-2.  **Trigger**: Admin types "FORTUNE444" in Wallet Checker.
-3.  **Start**:
-    - API updates global `startTime`.
-    - All clients sync and start countdown.
-    - Market Cap grows quadratically.
-    - Buy/Sell events stream in.
-4.  **End**: Timer hits 00:00.
-
----
-
-## 📁 Project Structure
+## Project Structure
 
 ```
-/444 Fortune/
-├── netlify/
-│   └── functions/
-│       └── simulation.mts  # Serverless function for global sync
-├── public/                 # Static assets (images, backgrounds)
-├── src/
-│   ├── components/         # UI Components (Countdown, Marquee, etc.)
-│   ├── hooks/              # Custom hooks (useTokenStream)
-│   ├── services/           # Simulation logic (MockTokenStream)
-│   ├── App.tsx             # Main application layout
-│   ├── main.tsx            # Entry point
-│   └── index.css           # Global styles & Tailwind
-├── netlify.toml            # Netlify configuration
-├── package.json            # Dependencies
-├── tailwind.config.js      # Design tokens
-└── vite.config.ts          # Build config
+src/
+├── components/
+│   ├── CountdownTimer.tsx   # Timer + market cap + fortune pool
+│   ├── BuyFeed.tsx          # Recent buys + top holders (click to copy)
+│   ├── WalletChecker.tsx    # Wallet input + secret trigger
+│   ├── CompactStepper.tsx   # How it works guide
+│   ├── StickyMiniBar.tsx    # Scroll-triggered stats bar (throttled)
+│   ├── SocialButton.tsx     # Social media link buttons
+│   └── Marquee.tsx          # Scrolling banner
+├── hooks/
+│   └── useTokenStream.ts    # State management + API polling
+├── services/
+│   └── MockTokenStream.ts   # Simulation engine
+├── config/
+│   └── simulationConfig.ts  # Tunable parameters
+└── types.ts                 # TypeScript interfaces
+
+netlify/functions/
+└── simulation.mts           # GET: status, POST: start simulation
 ```
 
----
+## Configuration
 
-## 🚀 Deployment
+All simulation parameters are in `src/config/simulationConfig.ts`:
 
-### Netlify
-1.  **Connect Repo**: Link your GitHub repository to Netlify.
-2.  **Build Settings**:
-    - **Build Command**: `npm run build`
-    - **Publish Directory**: `dist`
-3.  **Enable Blobs**: Go to **Site Settings > Blobs** and enable the feature.
-4.  **Environment**: No special env vars needed for the simulation (Blobs are auto-configured).
+```typescript
+{
+  INITIAL_MARKET_CAP: 5500,
+  TARGET_MARKET_CAP: 65000,
+  CURVE_EXPONENT: 1.1,
+  FORTUNE_POOL_FEE_RATE: 0.30,  // 30% of volume to pool
+  DURATION_MINUTES: 20,
+  UPDATE_INTERVAL_MS: 2000
+}
+```
 
----
+## Recent Changes (Nov 2024)
 
-## 📄 License
+### Bug Fixes
+- **Event listener memory leak**: Added `off()` method and `clearAllListeners()` to `MockTokenStream` to prevent listener accumulation on remounts
+- **Wallet address format**: Changed generated addresses to lowercase hex for BNB/BSC standard compliance
 
-MIT License
+### Performance Improvements
+- **Scroll throttling**: `StickyMiniBar` now throttles scroll events (100ms) with `requestAnimationFrame` for smoother performance
+- **Data structure optimization**: `activeTraders` converted from Array to Set for O(1) lookups
+- **Image optimization**: Switched mascot images from PNG to WebP format (~65% smaller file sizes)
+
+### Code Quality
+- **TypeScript improvements**: Added typed event system (`TokenStreamEventType`) to `MockTokenStream`, fixed `icon: any` in `SocialButton`
+- **Config clarity**: Renamed `FORTUNE_POOL_FEE_PERCENT` to `FORTUNE_POOL_FEE_RATE` with clearer documentation
+
+### Cleanup
+- Removed unused `LiveStats.tsx` component
+- Removed duplicate `favicon_io/` directory
+- Removed unused PNG files (now using WebP)
+
+## Deployment
+
+1. Connect repo to Netlify
+2. Build command: `npm run build`
+3. Publish directory: `dist`
+4. Enable Blobs in Site Settings
+
+## License
+
+MIT

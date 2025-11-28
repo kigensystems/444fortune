@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { TokenEvent, TopHolder } from '../types'
 
@@ -8,6 +9,17 @@ interface BuyFeedProps {
 
 export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
     const TOTAL_SUPPLY = 1_000_000_000 // 1 billion
+    const [copiedAddress, setCopiedAddress] = useState<string | null>(null)
+
+    const copyToClipboard = async (address: string) => {
+        try {
+            await navigator.clipboard.writeText(address)
+            setCopiedAddress(address)
+            setTimeout(() => setCopiedAddress(null), 1500)
+        } catch (err) {
+            console.error('Failed to copy:', err)
+        }
+    }
 
     const formatTime = (timestamp: number) => {
         const date = new Date(timestamp)
@@ -72,13 +84,10 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                             </div>
                         ) : (
                             buyEvents.map((event) => (
-                                <motion.a
+                                <motion.div
                                     layout
                                     key={event.id}
-                                    href={`https://bscscan.com/tx/${event.txHash}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="block rounded-xl p-4 transition-all duration-200 hover:scale-[1.02]"
+                                    className="block rounded-xl p-4 transition-all duration-200"
                                     style={{
                                         background: 'rgba(212, 175, 55, 0.1)',
                                         border: '1px solid rgba(212, 175, 55, 0.3)'
@@ -86,10 +95,6 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                                     initial={{ opacity: 0, x: -20 }}
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    whileHover={{
-                                        background: 'rgba(212, 175, 55, 0.15)',
-                                        borderColor: 'rgba(212, 175, 55, 0.5)'
-                                    }}
                                 >
                                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                         {/* Timestamp */}
@@ -103,9 +108,13 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                                         {/* Wallet */}
                                         <div>
                                             <div className="text-xs text-cream-gold/60 mb-1">WALLET</div>
-                                            <div className="text-sm font-mono font-semibold text-cream-gold">
-                                                {formatWallet(event.account)}
-                                            </div>
+                                            <button
+                                                onClick={() => copyToClipboard(event.account)}
+                                                className="text-sm font-mono font-semibold text-cream-gold hover:text-peach-gold transition-colors cursor-pointer"
+                                                title="Click to copy"
+                                            >
+                                                {copiedAddress === event.account ? '✓ Copied!' : formatWallet(event.account)}
+                                            </button>
                                         </div>
 
                                         {/* Amount USD */}
@@ -124,7 +133,7 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                                             </div>
                                         </div>
                                     </div>
-                                </motion.a>
+                                </motion.div>
                             ))
                         )}
                     </div>
@@ -165,14 +174,13 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                                         {/* Wallet */}
                                         <div>
                                             <div className="text-xs text-cream-gold/60 mb-1">WALLET</div>
-                                            <a
-                                                href={`https://bscscan.com/address/${holder.wallet}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-sm font-mono font-semibold text-cream-gold hover:text-peach-gold transition-colors underline"
+                                            <button
+                                                onClick={() => copyToClipboard(holder.wallet)}
+                                                className="text-sm font-mono font-semibold text-cream-gold hover:text-peach-gold transition-colors cursor-pointer"
+                                                title="Click to copy"
                                             >
-                                                {formatWallet(holder.wallet)}
-                                            </a>
+                                                {copiedAddress === holder.wallet ? '✓ Copied!' : formatWallet(holder.wallet)}
+                                            </button>
                                         </div>
 
                                         {/* Balance */}
@@ -194,15 +202,10 @@ export function BuyFeed({ buyEvents, topHolders }: BuyFeedProps) {
                                         {/* First Buy */}
                                         <div>
                                             <div className="text-xs text-cream-gold/60 mb-1">FIRST BUY</div>
-                                            {holder.firstBuyTxHash ? (
-                                                <a
-                                                    href={`https://bscscan.com/tx/${holder.firstBuyTxHash}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="text-sm font-mono font-semibold text-cream-gold hover:text-peach-gold transition-colors underline"
-                                                >
-                                                    {formatWallet(holder.firstBuyTxHash)}
-                                                </a>
+                                            {holder.firstBuyTime ? (
+                                                <div className="text-sm font-semibold text-cream-gold">
+                                                    {formatTime(holder.firstBuyTime)}
+                                                </div>
                                             ) : (
                                                 <div className="text-sm text-cream-gold/40">—</div>
                                             )}

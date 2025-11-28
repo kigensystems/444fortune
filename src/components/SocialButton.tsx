@@ -1,9 +1,10 @@
-import { motion } from 'framer-motion'
+import { motion } from "framer-motion";
+import type { IconType } from "react-icons";
 
 interface SocialButtonProps {
-    icon: any
-    href: string
-    label: string
+  icon: IconType;
+  href: string;
+  label: string;
 }
 
 export function SocialButton({ icon: Icon, href, label }: SocialButtonProps) {

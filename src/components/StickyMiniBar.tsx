@@ -1,22 +1,41 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+
+const SCROLL_THRESHOLD = 800;
+const THROTTLE_MS = 100;
 
 interface StickyMiniBarProps {
-    timeLeft: number
-    fortunePool: number | null
+  timeLeft: number;
+  fortunePool: number | null;
 }
 
 export function StickyMiniBar({ timeLeft, fortunePool }: StickyMiniBarProps) {
-    const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
+  const lastScrollTime = useRef(0);
+  const rafId = useRef<number | null>(null);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsVisible(window.scrollY > 800)
-        }
+  // Throttled scroll handler for better performance
+  const handleScroll = useCallback(() => {
+    const now = Date.now();
+    if (now - lastScrollTime.current < THROTTLE_MS) {
+      // Schedule a check at the end of the throttle period
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+      rafId.current = requestAnimationFrame(() => {
+        setIsVisible(window.scrollY > SCROLL_THRESHOLD);
+      });
+      return;
+    }
+    lastScrollTime.current = now;
+    setIsVisible(window.scrollY > SCROLL_THRESHOLD);
+  }, []);
 
-        window.addEventListener('scroll', handleScroll)
-        return () => window.removeEventListener('scroll', handleScroll)
-    }, [])
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId.current) cancelAnimationFrame(rafId.current);
+    };
+  }, [handleScroll]);
 
     const minutes = Math.floor(timeLeft / 60)
     const seconds = timeLeft % 60

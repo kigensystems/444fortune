@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
-import { FaTwitter, FaTelegramPlane, FaDiscord, FaGlobe } from 'react-icons/fa'
+import { FaTelegramPlane, FaDiscord, FaGlobe } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTokenStream } from './hooks/useTokenStream'
@@ -99,7 +100,7 @@ function App() {
               }}
             >
               <img
-                src="/heyyi.png"
+                src="/heyyi.webp"
                 alt="Heyyi - Prosperity Goddess"
                 className="w-full h-full object-cover object-center"
               />
@@ -166,14 +167,17 @@ function App() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7, duration: 0.6 }}
             >
-              <SocialButton icon={FaTwitter} href="#" label="Twitter" />
+              <SocialButton icon={FaXTwitter} href="https://x.com/444Fortune" label="X" />
               <SocialButton icon={FaTelegramPlane} href="#" label="Telegram" />
               <SocialButton icon={FaDiscord} href="#" label="Discord" />
               <SocialButton icon={FaGlobe} href="#" label="Website" />
             </motion.div>
 
-            <motion.button
-              className="px-12 py-6 text-2xl rounded-full cta-button-3d"
+            <motion.a
+              href="https://four.meme/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-12 py-6 text-2xl rounded-full cta-button-3d inline-block"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.9, duration: 0.6 }}
@@ -185,12 +189,9 @@ function App() {
                 y: 6,
                 boxShadow: '0 2px 0 #B8960B, 0 6px 12px rgba(0, 0, 0, 0.3)'
               }}
-              onClick={() => {
-                gameSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-              }}
             >
               BUY $FORTUNE
-            </motion.button>
+            </motion.a>
           </motion.div>
 
           <motion.div
@@ -211,7 +212,7 @@ function App() {
               }}
             >
               <img
-                src="/cz.png"
+                src="/cz.webp"
                 alt="CZ - Modern Fortune Bringer"
                 className="w-full h-full object-cover"
                 style={{ objectPosition: '44% 50%' }}
