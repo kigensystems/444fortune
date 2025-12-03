@@ -1,8 +1,8 @@
 export const SimulationConfig = {
   // Bonding Curve Parameters
   INITIAL_MARKET_CAP: 5500,
-  TARGET_MARKET_CAP: 65000, // Target at 20 minutes
-  CURVE_EXPONENT: 1.1, // Adjusted for ~7-8 min first $20k growth
+  TARGET_MARKET_CAP: 60000, // Target at 20 minutes
+  CURVE_EXPONENT: 1.1,
 
   // Tokenomics
   TOTAL_SUPPLY: 1_000_000_000, // 1 Billion
@@ -14,12 +14,12 @@ export const SimulationConfig = {
   FORTUNE_POOL_FEE_RATE: 0.3,
   SELL_IMPACT_RATIO: 0.8, // Sells only remove 80% of value (Up-Only Bias)
 
-  // Buy Sizing (as % of Market Cap) - Scaled ~4x to hit target MC
-  // Required avg: 0.413% per event | New weighted avg: ~0.54%
+  // Buy Sizing (as % of Market Cap)
+  // Target ~0.4% weighted avg per event to hit $60k in 600 events
   BUY_SIZING: {
-    WHALE: { min: 0.02, max: 0.04 }, // 2% - 4% (was 0.5-1%)
-    MEDIUM: { min: 0.005, max: 0.012 }, // 0.5% - 1.2% (was 0.1-0.3%)
-    SHRIMP: { min: 0.001, max: 0.004 }, // 0.1% - 0.4% (was 0.01-0.05%)
+    WHALE: { min: 0.015, max: 0.03 }, // 1.5% - 3%
+    MEDIUM: { min: 0.004, max: 0.009 }, // 0.4% - 0.9%
+    SHRIMP: { min: 0.0008, max: 0.003 }, // 0.08% - 0.3%
   },
 
   // Probabilities
