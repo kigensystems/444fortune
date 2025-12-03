@@ -57,7 +57,10 @@ export function StickyMiniBar({ timeLeft, fortunePool }: StickyMiniBarProps) {
                         Fortune Pool: {fortunePool !== null ? `$${fortunePool.toLocaleString(undefined, { maximumFractionDigits: 0 })}` : 'Loading...'}
                     </div>
                 </div>
-                <motion.button
+                <motion.a
+                    href="https://four.meme/token/0xc30f06d53a2044cf7d511ee29a690c911b524444"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="px-6 py-2 md:px-8 md:py-3 text-base md:text-lg font-black rounded-full"
                     style={{
                         background: 'linear-gradient(180deg, #8B0000 0%, #600000 100%)',
@@ -68,7 +71,7 @@ export function StickyMiniBar({ timeLeft, fortunePool }: StickyMiniBarProps) {
                     whileTap={{ y: 4, boxShadow: '0 0px 0 #400000, 0 2px 4px rgba(0, 0, 0, 0.3)' }}
                 >
                     BUY $FORTUNE
-                </motion.button>
+                </motion.a>
             </div>
         </motion.div>
     )
