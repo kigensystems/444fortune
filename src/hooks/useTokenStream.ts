@@ -113,9 +113,9 @@ export function useTokenStream(): UseTokenStreamResult {
       }
     };
 
-    // Check immediately and then every 5 seconds
+    // Check immediately and then every 2 seconds for fast sync
     checkGlobalState();
-    const pollInterval = setInterval(checkGlobalState, 5000);
+    const pollInterval = setInterval(checkGlobalState, 2000);
 
     return () => {
       clearInterval(pollInterval);
