@@ -2,7 +2,7 @@ export const SimulationConfig = {
   // Bonding Curve Parameters
   INITIAL_MARKET_CAP: 5500,
   TARGET_MARKET_CAP: 60000, // Target at 20 minutes
-  CURVE_EXPONENT: 1.1,
+  CURVE_EXPONENT: 1.8, // Slower early growth, accelerates toward end
 
   // Tokenomics
   TOTAL_SUPPLY: 1_000_000_000, // 1 Billion
