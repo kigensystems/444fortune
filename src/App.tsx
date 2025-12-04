@@ -5,12 +5,14 @@ import { FaXTwitter } from 'react-icons/fa6'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useTokenStream } from './hooks/useTokenStream'
+import { useBackgroundMusic } from './hooks/useBackgroundMusic'
 import { Marquee } from './components/Marquee'
 import { CountdownTimer } from './components/CountdownTimer'
 import { CompactStepper } from './components/CompactStepper'
 import { StickyMiniBar } from './components/StickyMiniBar'
 import { SocialButton } from './components/SocialButton'
 import { BuyFeed } from './components/BuyFeed'
+import { SoundToggle } from './components/SoundToggle'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -18,6 +20,9 @@ function App() {
   const gameSectionRef = useRef<HTMLDivElement>(null)
   const [timeLeft, setTimeLeft] = useState(20 * 60)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
+
+  // Background music - starts on first user interaction
+  const { isPlaying, isMuted, toggleMute } = useBackgroundMusic('/hype-music.mp3')
 
   // Use custom hook for data logic
   const { marketCap, fortunePool, buyEvents, topHolders, startSimulation, startTime } = useTokenStream()
@@ -249,6 +254,8 @@ function App() {
       </section>
 
       <Marquee text="✦ JOIN 444 FORTUNES ✦ PROSPERITY AWAITS ✦ GOOD LUCK ✦" />
+
+      <SoundToggle isPlaying={isPlaying} isMuted={isMuted} onToggle={toggleMute} />
     </div>
   )
 }
