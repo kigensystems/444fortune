@@ -58,7 +58,7 @@ export function StickyMiniBar({ timeLeft, fortunePool }: StickyMiniBarProps) {
                     </div>
                 </div>
                 <motion.a
-                    href="https://four.meme"
+                    href="https://four.meme/token/0xc8ed6bf586dc181a5366444a87c1f80f06c84444"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="px-6 py-2 md:px-8 md:py-3 text-base md:text-lg font-black rounded-full"
