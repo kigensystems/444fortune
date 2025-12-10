@@ -179,7 +179,7 @@ function App() {
             </motion.div>
 
             <motion.a
-              href="https://four.meme/token/0xb136b99fc1fd97eb6029c76db9f4ac9c94294444"
+              href="https://four.meme"
               target="_blank"
               rel="noopener noreferrer"
               className="px-12 py-6 text-2xl rounded-full cta-button-3d inline-block"
